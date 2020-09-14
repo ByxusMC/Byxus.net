@@ -38,6 +38,10 @@ header {
 		max-height: 25vh;
 		height: 25vh;
 	}
+	@media screen and (min-width: 1400px) {
+		max-height: 30vh;
+		height: 30vh;
+	}
 	.header {
 		&-background {
 			width: 100%;
@@ -67,6 +71,16 @@ header {
 					top: 0;
 					left: 0;
 					transform: translate(0);
+					order: 1;
+					width: auto;
+					height: 100%;
+					width: 100%;
+				}
+				@media screen and (min-width: 1400px) {
+					position: initial;
+					top: 0;
+					left: 0;
+					transform: translate(0);
 					order: 2;
 					width: auto;
 					height: 100%;
@@ -75,6 +89,9 @@ header {
 				img {
 					width: 100%;
 					@media screen and (min-width: 576px) {
+						width: 80%;
+					}
+					@media screen and (min-width: 1400px) {
 						width: 60%;
 					}
 				}
@@ -82,6 +99,13 @@ header {
 			.item-counter {
 				display: none;
 				@media screen and (min-width: 576px) {
+					display: flex;
+					justify-content: left;
+					align-items: center;
+					order: 2;
+					width: 100%;
+				}
+				@media screen and (min-width: 1400px) {
 					display: flex;
 					justify-content: center;
 					align-items: center;
@@ -91,7 +115,7 @@ header {
 			}
 			.item-socials {
 				display: none;
-				@media screen and (min-width: 576px) {
+				@media screen and (min-width: 1400px) {
 					display: flex;
 					justify-content: center;
 					align-items: center;

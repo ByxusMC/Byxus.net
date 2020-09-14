@@ -1,7 +1,7 @@
 <template>
-	<b-navbar toggleable="lg" sticky>
+	<b-navbar toggleable="md" sticky>
 		<b-navbar-brand href="#">ByxusMC</b-navbar-brand>
-		<div class="online-players btn btn-secondary font-weight-bold text-uppercase">{{ $t('players_online') }} : 5</div>
+		<div class="online-players btn btn-secondary font-weight-500 letter-spacing-1">{{ $t('players_online') }} : 5</div>
 
 		<b-collapse id="nav-collapse" is-nav>
 			<b-navbar-nav>
