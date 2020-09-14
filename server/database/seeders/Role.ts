@@ -11,77 +11,77 @@ export default class RoleSeeder extends BaseSeeder {
 				en: 'Manager'
 			},
 			{
-				code: 'OKKQUSJIdmQSPYuIaUox0HZyv5NyEmhH',
+				code: 'G4rB97PhXazIvVgX1d1E9N46GrJ8Ce5k',
 				fr: 'Administrateur',
 				en: 'Administrator'
 			},
 			{
-				code: 'OKKQUSJIdmQSPYuIaUox0HZyv5NyEmhH',
+				code: 'AKY12FiXXLzdPybtfnxq1JO25YBT1av5',
 				fr: 'Responsable',
 				en: 'Responsible'
 			},
 			{
-				code: 'OKKQUSJIdmQSPYuIaUox0HZyv5NyEmhH',
+				code: 'Bv8cWshM8IDuif2GvoHOeMk2zH561J7Q',
 				fr: 'Développeur',
 				en: 'Developper'
 			},
 			{
-				code: 'OKKQUSJIdmQSPYuIaUox0HZyv5NyEmhH',
+				code: 'zDnAhyQMPTz6RzWVqvCc1p0KeUI4Ox7h',
 				fr: 'Modérateur',
 				en: 'Moderator'
 			},
 			{
-				code: 'OKKQUSJIdmQSPYuIaUox0HZyv5NyEmhH',
+				code: 'cYsYg9wFFzjGAu6TnWUVSX8oN02jsHcS',
 				fr: 'Assistant',
 				en: 'Assistant'
 			},
 			{
-				code: 'OKKQUSJIdmQSPYuIaUox0HZyv5NyEmhH',
+				code: '4dw9lJhbQ8Fj6nYxHWSVvH38ZdxARikO',
 				fr: 'Animateur',
 				en: 'Animator'
 			},
 			{
-				code: 'OKKQUSJIdmQSPYuIaUox0HZyv5NyEmhH',
+				code: 'NB5qLqzZRIfenBoQi04kPZ6Gh0g56OJ5',
 				fr: 'Architecte',
 				en: 'Architect'
 			},
 			{
-				code: 'OKKQUSJIdmQSPYuIaUox0HZyv5NyEmhH',
+				code: '7PthSYtvYbK4rEpiTVUwVf3ysiRfqZtO',
 				fr: 'Staff',
 				en: 'Staff'
 			},
 			{
-				code: 'OKKQUSJIdmQSPYuIaUox0HZyv5NyEmhH',
+				code: 'pzlo9GWYG38zWfROcCk9ZXUsFYjYL072',
 				fr: 'Youtubeur',
 				en: 'Youtuber'
 			},
 			{
-				code: 'OKKQUSJIdmQSPYuIaUox0HZyv5NyEmhH',
+				code: 'gSSZKXVFy5TjJtJj4rupqkK2Z2kdkinJ',
 				fr: 'Ami',
 				en: 'Friend'
 			},
 			{
-				code: 'OKKQUSJIdmQSPYuIaUox0HZyv5NyEmhH',
+				code: 'J13ScVKtAVAUWlCKL416sVUeOdZxk2Ko',
 				fr: 'Posséidon',
 				en: 'Posséidon'
 			},
 			{
-				code: 'OKKQUSJIdmQSPYuIaUox0HZyv5NyEmhH',
+				code: 'nzwTNbaWtbIQEvckO4ASNuGVYB7dYWbD',
 				fr: 'Kraken',
 				en: 'Kraken'
 			},
 			{
-				code: 'OKKQUSJIdmQSPYuIaUox0HZyv5NyEmhH',
+				code: 'mlWId947SLBPl1jVcxRbLR48x48ZEylx',
 				fr: 'Poulpe',
 				en: 'Octopus'
 			},
 			{
-				code: 'OKKQUSJIdmQSPYuIaUox0HZyv5NyEmhH',
+				code: 'AXmCdsm4CMHJVuGwAG2ySzFrAvcbsmBq',
 				fr: 'Poisson',
 				en: 'Fish'
 			},
 			{
-				code: 'OKKQUSJIdmQSPYuIaUox0HZyv5NyEmhH',
+				code: '0APMlBUH7kdAhzM8R8olgQdwbxRmcKTU',
 				fr: 'Membre',
 				en: 'Member'
 			}

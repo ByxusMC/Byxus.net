@@ -4,7 +4,7 @@
 			<div class="container show-sm mb-5">
 				<h1 class="display-4" :aria-label="user.pseudonyme + '\'s profil'">{{ user.pseudonyme }}</h1>
 				<div class="badge-container">
-					<div v-for="(rank, key) in user.ranks" class="badge" :style="'color: white; background-color:' + rank.color" :key="key">{{ $t(rank.label.code) }}</div>
+					<div v-for="(role, key) in user.roles" class="badge" :style="'color: white; background-color:' + role.color" :key="key">{{ $t(role.label.code) }}</div>
 				</div>
 			</div>
 			<div class="avatar">
@@ -60,6 +60,11 @@ export default {
 		flex-wrap: wrap;
 		.badge-container {
 			width: 100%;
+			.badge {
+				margin: 3px;
+				padding: 5px 8px;
+				border-radius: 24px;
+			}
 		}
 		.avatar {
 			display: flex;
