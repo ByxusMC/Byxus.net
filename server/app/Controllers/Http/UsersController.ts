@@ -22,16 +22,19 @@ export default class UsersController {
 		return { user }
 	}
 
-	public async update({ response, request, params, auth }: HttpContextContract) {
+	public async update({ request, params }: HttpContextContract) {
 		const user = await User.findOrFail(params.id)
+		const roles = await request.input('roles')
 
-		if (user.id != auth.user!.id) {
-			return response.unauthorized()
-		}
+		// if (user.id != auth.user!.id) {
+		// 	return response.unauthorized()
+		// }
 
 		const data = await request.validate(UpdateValidator)
+		console.log(user, roles, data)
 
-		await auth.user!.merge({ ...data }).save()
+		await user.merge(data).save()
+		await user.related('roles').sync(roles)
 
 		return { message: 'Le compte a été mis à jour' }
 	}
