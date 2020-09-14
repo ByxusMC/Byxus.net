@@ -6,7 +6,10 @@
 				<img src="~public/images/logo.png" class="logo" alt="" />
 			</div>
 			<div class="item-counter">
-				<div class="btn btn-secondary">{{ $t('players_online') }} : 5</div>
+				<div class="btn-group" role="group" aria-label="Basic example">
+					<div class="btn btn-primary text-uppercase font-weight-500 letter-spacing-1">{{ $t('players_online') }} : 5</div>
+					<div class="btn btn-secondary text-uppercase font-weight-500 letter-spacing-1">play.byxus.fr</div>
+				</div>
 			</div>
 			<div class="item-socials">
 				<div class="container">
