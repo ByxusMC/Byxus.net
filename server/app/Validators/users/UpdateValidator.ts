@@ -24,10 +24,15 @@ export default class StoreValidator {
 	 *    ```
 	 */
 	public schema = schema.create({
-		firstname: schema.string.optional({ trim: true }),
-		lastname: schema.string.optional({ trim: true }),
-		email: schema.string.optional({ trim: true }, [rules.email(), rules.unique({ table: 'users', column: 'email' })]),
-		password: schema.string.optional({ trim: true }, [rules.confirmed()])
+		pseudonyme: schema.string.optional({ trim: true }),
+		uuid: schema.string.optional({ trim: true }, [
+			rules.regex(/[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}/)
+		]),
+		is_active: schema.boolean.optional(),
+		is_confirmed: schema.boolean.optional(),
+		is_ban: schema.boolean.optional(),
+		confirmation_token: schema.string.optional(),
+		recovery_token: schema.string.optional()
 	})
 
 	/**
