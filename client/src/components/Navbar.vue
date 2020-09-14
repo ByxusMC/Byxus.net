@@ -5,7 +5,18 @@
 
 		<b-collapse id="nav-collapse" is-nav>
 			<b-navbar-nav>
-				<b-nav-item href="#" class="active">Accueil</b-nav-item>
+				<b-nav-item>
+					<nuxt-link to="/" href="#" class="text-uppercase font-weight-500 letter-spacing-1 active">Accueil</nuxt-link>
+				</b-nav-item>
+				<b-nav-item>
+					<nuxt-link to="/" href="#" class="text-uppercase font-weight-500 letter-spacing-1 active">Forum</nuxt-link>
+				</b-nav-item>
+				<b-nav-item>
+					<nuxt-link to="/" href="#" class="text-uppercase font-weight-500 letter-spacing-1 active">Nos jeux</nuxt-link>
+				</b-nav-item>
+				<b-nav-item>
+					<nuxt-link to="/" href="#" class="text-uppercase font-weight-500 letter-spacing-1 active">Statistiques</nuxt-link>
+				</b-nav-item>
 			</b-navbar-nav>
 
 			<b-navbar-nav class="ml-auto">
@@ -17,7 +28,7 @@
 					<b-dropdown-item href="#">Mon profil</b-dropdown-item>
 					<b-dropdown-item @click="handleLogout">Se déconnecter</b-dropdown-item>
 				</b-nav-item-dropdown>
-				<b-button v-else @click.prevent="toggleModal" right>Connexion</b-button>
+				<nuxt-link v-else to="/authentication/login" class="btn btn-secondary">Connexion</nuxt-link>
 			</b-navbar-nav>
 		</b-collapse>
 	</b-navbar>
@@ -61,6 +72,7 @@ export default {
 	}
 	.navbar-nav {
 		.nav-item {
+			margin: 0 1rem;
 			a {
 				color: white;
 			}
@@ -69,7 +81,7 @@ export default {
 				&::before {
 					content: '';
 					position: absolute;
-					bottom: -17px;
+					bottom: -18px;
 					left: 50%;
 					transform: translateX(-50%);
 					width: 120%;
