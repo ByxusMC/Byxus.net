@@ -24,17 +24,9 @@ export default class StoreValidator {
 	 *    ```
 	 */
 	public schema = schema.create({
-		pseudonyme: schema.string.optional({ trim: true }),
-		email: schema.string.optional({ trim: true }, [rules.email(), rules.unique({ table: 'users', column: 'email' })]),
-		password: schema.string.optional({ trim: true }, [rules.confirmed()]),
-		uuid: schema.string.optional({ trim: true }, [
-			rules.regex(/[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}/)
-		]),
-		is_active: schema.boolean.optional(),
-		is_confirmed: schema.boolean.optional(),
-		is_ban: schema.boolean.optional(),
-		confirmation_token: schema.string.optional(),
-		recovery_token: schema.string.optional()
+		label: schema.string.optional(),
+		color: schema.string.optional(),
+		power: schema.number.optional()
 	})
 
 	/**
@@ -59,11 +51,8 @@ export default class StoreValidator {
 	 */
 	public messages = {
 		required: 'Le champ {{ field }} est obligatoire',
-		'pseudonyme.required': 'Le pseudo minecarft est obligatoire',
-		'pseudonyme.string': 'Le pseudo doit-être une chaîne de caractère',
-		'email.required': "L'email est obligatoire",
-		'email.email': "L'email doit-être une adresse email valide",
-		'email.unique': "L'email existe déjà, veuillez en choisir une autre",
-		'password_confirmation.confirmed': "Le mot de passe n'a pas été confirmé ou est invalide"
+		'label.string': "Le nom d'affichage doit-être une chaîne de caractère",
+		'color.string': 'La couleur doit-être une chaine de caractère',
+		'power.number': 'Le niveau de puissance du rôle doit-être un nombre'
 	}
 }
