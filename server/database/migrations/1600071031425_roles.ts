@@ -8,7 +8,7 @@ export default class Roles extends BaseSchema {
 			table.increments('id')
 			table.string('label').notNullable()
 			table.string('color').notNullable()
-			table.integer('power').notNullable()
+			table.integer('power').notNullable().unsigned()
 			table.timestamps(true, true)
 		})
 	}
