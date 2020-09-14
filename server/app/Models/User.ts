@@ -2,6 +2,7 @@ import { DateTime } from 'luxon'
 import Hash from '@ioc:Adonis/Core/Hash'
 import { column, beforeSave, BaseModel, manyToMany, ManyToMany } from '@ioc:Adonis/Lucid/Orm'
 import Role from 'App/Models/Role'
+import Rank from 'App/Models/Rank'
 
 export default class User extends BaseModel {
 	@column({ isPrimary: true })
@@ -39,6 +40,9 @@ export default class User extends BaseModel {
 
 	@manyToMany(() => Role)
 	public roles: ManyToMany<typeof Role>
+
+	@manyToMany(() => Rank)
+	public ranks: ManyToMany<typeof Rank>
 
 	@column.dateTime({ autoCreate: true })
 	public createdAt: DateTime

@@ -24,10 +24,7 @@ export default class RanksController {
 
 	public async update({ request, params }: HttpContextContract) {
 		const rank = await Rank.findOrFail(params.id)
-		const roles = await request.input('roles')
-
 		const data = await request.validate(UpdateValidator)
-		console.log(rank, roles, data)
 
 		await rank.merge(data).save()
 
@@ -37,7 +34,7 @@ export default class RanksController {
 	public async destroy({ params }: HttpContextContract) {
 		const rank = await Rank.findOrFail(params.id)
 
-		rank!.delete()
+		rank.delete()
 		return { message: 'Le grade a bien été supprimé' }
 	}
 }

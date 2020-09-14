@@ -6,7 +6,11 @@ import UpdateValidator from 'App/Validators/users/UpdateValidator'
 
 export default class UsersController {
 	public async index() {
-		const users = await User.query().preload('roles')
+		const users = await User.query()
+			.preload('roles')
+			.preload('ranks', (rank) => {
+				rank.preload('label')
+			})
 		return { users }
 	}
 
@@ -25,16 +29,12 @@ export default class UsersController {
 	public async update({ request, params }: HttpContextContract) {
 		const user = await User.findOrFail(params.id)
 		const roles = await request.input('roles')
-
-		// if (user.id != auth.user!.id) {
-		// 	return response.unauthorized()
-		// }
-
+		const ranks = await request.input('ranks')
 		const data = await request.validate(UpdateValidator)
-		console.log(user, roles, data)
 
 		await user.merge(data).save()
 		await user.related('roles').sync(roles)
+		await user.related('ranks').sync(ranks)
 
 		return { message: 'Le compte a été mis à jour' }
 	}
