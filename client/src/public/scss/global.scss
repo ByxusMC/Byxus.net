@@ -1,0 +1,12 @@
+@import './modules/variables.scss';
+@import './modules/images.scss';
+@import './modules/buttons.scss';
+@import './modules/icons.scss';
+
+body {
+	background-color: $background-color;
+}
+
+* {
+	color: $text-color;
+}

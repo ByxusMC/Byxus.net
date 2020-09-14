@@ -1,9 +1,8 @@
 <template>
-	<div>
-		<client-only>
-			<Navbar />
-			<LangSwitcher />
-		</client-only>
+	<div style="min-height: 100vh">
+		<Header />
+		<Navbar />
+		<LangSwitcher />
 		{{ this.$auth.loggedIn }}
 		<Nuxt />
 	</div>
@@ -12,10 +11,11 @@
 <script>
 import Navbar from '~/components/Navbar'
 import LangSwitcher from '~/components/LangSwitcher'
+import Header from '~/components/Header'
 
 export default {
 	name: 'master',
-	components: { Navbar, LangSwitcher },
+	components: { Navbar, LangSwitcher, Header },
 }
 </script>
 

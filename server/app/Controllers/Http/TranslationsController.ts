@@ -7,36 +7,36 @@ import randomstring from 'randomstring'
 
 export default class TranslatinsController {
 	public async index() {
-		const tanslations = await Translation.all()
-		return { tanslations }
+		const translations = await Translation.all()
+		return { translations }
 	}
 
 	public async show({ params }: HttpContextContract) {
-		const tanslation = await Translation.findOrFail(params.id)
-		return { tanslation }
+		const translation = await Translation.findOrFail(params.id)
+		return { translation }
 	}
 
 	public async store({ request }: HttpContextContract) {
 		const data = await request.validate(StoreValidator)
 		const code = randomstring.generate()
-		const tanslation = await Translation.create({ ...data, code })
+		const translation = await Translation.create({ ...data, code })
 
-		return { tanslation }
+		return { translation }
 	}
 
 	public async update({ request, params }: HttpContextContract) {
-		const tanslation = await Translation.findOrFail(params.id)
+		const translation = await Translation.findOrFail(params.id)
 		const data = await request.validate(UpdateValidator)
 
-		await tanslation.merge(data).save()
+		await translation.merge(data).save()
 
 		return { message: 'La traduction a été mis à jour' }
 	}
 
 	public async destroy({ params }: HttpContextContract) {
-		const tanslation = await Translation.findOrFail(params.id)
+		const translation = await Translation.findOrFail(params.id)
 
-		tanslation!.delete()
+		translation!.delete()
 		return { message: 'La traduction a bien été supprimé' }
 	}
 }

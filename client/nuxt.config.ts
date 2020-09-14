@@ -83,7 +83,7 @@ export default {
 	 ** Global style module settings
 	 ** See https://fr.nuxtjs.org/guides/configuration-glossary/configuration-css
 	 */
-	css: ['material-icons/iconfont/material-icons.scss'],
+	css: ['material-icons/iconfont/material-icons.scss', '~public/icons/style.css', '~public/scss/global.scss'],
 
 	/*
 	 ** Plugins to load before mounting the App

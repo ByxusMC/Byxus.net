@@ -2,6 +2,8 @@
 	<div class="main">
 		<img src="https://github.com/Izoxy/adonis-nuxt-template/blob/master/assets/banner.png?raw=true" alt="" />
 		<h1>{{ $t('welcome') }}</h1>
+		<br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+		<br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
 	</div>
 </template>
 
