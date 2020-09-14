@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('fonts/icomoon.eot?xllj5i');
-  src:  url('fonts/icomoon.eot?xllj5i#iefix') format('embedded-opentype'),
-    url('fonts/icomoon.ttf?xllj5i') format('truetype'),
-    url('fonts/icomoon.woff?xllj5i') format('woff'),
-    url('fonts/icomoon.svg?xllj5i#icomoon') format('svg');
+  src:  url('fonts/icomoon.eot?eunpw5');
+  src:  url('fonts/icomoon.eot?eunpw5#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?eunpw5') format('truetype'),
+    url('fonts/icomoon.woff?eunpw5') format('woff'),
+    url('fonts/icomoon.svg?eunpw5#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -33,4 +33,7 @@
 }
 .icon-twitter:before {
   content: "\f042";
+}
+.icon-home-alt1:before {
+  content: "\f03d";
 }

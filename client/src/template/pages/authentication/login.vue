@@ -5,7 +5,12 @@
 		</div>
 		<div class="form">
 			<div class="container">
-				<h1 class="display-4">Connexion</h1>
+				<div class="d-flex justify-content-between">
+					<h1 class="display-4">Connexion</h1>
+					<nuxt-link to="/" class="btn btn-primary align-self-center" style="width: 32px; height: 32px; position: relative">
+						<i class="icon-home-alt1" style="color: white; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%)"></i>
+					</nuxt-link>
+				</div>
 				<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Odio dolores fugit dicta earum esse distinctio ea atque. In, ratione vel?</p>
 				<div class="form-group">
 					<label>Email</label>
