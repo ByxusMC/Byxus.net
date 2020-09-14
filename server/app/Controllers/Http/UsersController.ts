@@ -6,7 +6,7 @@ import UpdateValidator from 'App/Validators/users/UpdateValidator'
 
 export default class UsersController {
 	public async index() {
-		const users = await User.all()
+		const users = await User.query().preload('roles')
 		return { users }
 	}
 
@@ -30,21 +30,6 @@ export default class UsersController {
 		}
 
 		const data = await request.validate(UpdateValidator)
-
-		/**
-		 *	const avatar = request.file('avatar', {
-		 *		extnames: ['jpg', 'jpeg', 'png', 'svg']
-		 * 	})
-		 * 
-		 * 	if (avatar?.hasErrors) {
-		 *		return avatar.errors
-		 *	}
-
-		 *	await avatar?.move(Application.publicPath(`/uploads/users/avatar`), {
-		 *		name: `${params.id}.${avatar.extname}`,
-		 *		overwrite: true
-		 *	})
-		 */
 
 		await auth.user!.merge({ ...data }).save()
 
