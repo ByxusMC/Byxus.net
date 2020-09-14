@@ -5,25 +5,25 @@
 
 		<b-collapse id="nav-collapse" is-nav>
 			<b-navbar-nav>
-				<b-nav-item>
-					<nuxt-link to="/" href="#" class="text-uppercase font-weight-500 letter-spacing-1 active">Accueil</nuxt-link>
+				<b-nav-item :class="{ active: this.$route.path == '/' }">
+					<nuxt-link to="/" href="#" class="text-uppercase font-weight-500 letter-spacing-1">Accueil</nuxt-link>
 				</b-nav-item>
 				<b-nav-item>
-					<nuxt-link to="/" href="#" class="text-uppercase font-weight-500 letter-spacing-1 active">Forum</nuxt-link>
+					<nuxt-link to="/" href="#" class="text-uppercase font-weight-500 letter-spacing-1">Forum</nuxt-link>
 				</b-nav-item>
 				<b-nav-item>
-					<nuxt-link to="/" href="#" class="text-uppercase font-weight-500 letter-spacing-1 active">Nos jeux</nuxt-link>
+					<nuxt-link to="/" href="#" class="text-uppercase font-weight-500 letter-spacing-1">Nos jeux</nuxt-link>
 				</b-nav-item>
 				<b-nav-item>
-					<nuxt-link to="/" href="#" class="text-uppercase font-weight-500 letter-spacing-1 active">Statistiques</nuxt-link>
+					<nuxt-link to="/" href="#" class="text-uppercase font-weight-500 letter-spacing-1">Statistiques</nuxt-link>
 				</b-nav-item>
 			</b-navbar-nav>
 
 			<b-navbar-nav class="ml-auto">
-				<b-nav-item-dropdown v-if="this.$auth.loggedIn" right>
+				<b-nav-item-dropdown style="padding: 0" v-if="this.$auth.loggedIn" right>
 					<template v-slot:button-content>
+						<span class="text-uppercase font-weight-500 letter-spacing-1 pr-2" style="color: white">{{ $auth.user.pseudonyme }}</span>
 						<b-avatar></b-avatar>
-						{{ $auth.user.pseudonyme }}
 					</template>
 					<b-dropdown-item href="#">Mon profil</b-dropdown-item>
 					<b-dropdown-item @click="handleLogout">Se déconnecter</b-dropdown-item>
@@ -70,14 +70,27 @@ export default {
 			display: none;
 		}
 	}
-	.navbar-nav {
+	.navbar-nav:first-child {
 		.nav-item {
 			margin: 0 1rem;
+			position: relative;
+			transition: 0.3s all;
 			a {
 				color: white;
+				text-decoration: none;
 			}
 			&.active {
-				position: relative;
+				&::before {
+					content: '';
+					position: absolute;
+					bottom: -18px;
+					left: 50%;
+					transform: translateX(-50%);
+					width: 120%;
+					border-bottom: 5px solid $secondary-color;
+				}
+			}
+			&:hover {
 				&::before {
 					content: '';
 					position: absolute;

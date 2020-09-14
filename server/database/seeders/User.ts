@@ -9,7 +9,7 @@ export default class UserSeeder extends BaseSeeder {
 			is_active: true,
 			is_confirmed: true,
 			is_ban: false,
-			email: 'baptiste.parmantier.pro@gmail.fr',
+			email: 'baptiste.parmantier.pro@gmail.com',
 			password: '486279315Aa?'
 		})
 	}

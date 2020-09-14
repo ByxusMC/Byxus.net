@@ -1,0 +1,12 @@
+.dropdown-toggle {
+	&:focus {
+		outline: 0px;
+		box-shadow: 0;
+	}
+}
+
+.dropdown-toggle {
+	&::after {
+		display: none;
+	}
+}
