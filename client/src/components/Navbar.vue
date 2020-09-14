@@ -20,10 +20,11 @@
 			</b-navbar-nav>
 
 			<b-navbar-nav class="ml-auto">
-				<b-nav-item-dropdown style="padding: 0" v-if="this.$auth.loggedIn" right>
+				<b-nav-item-dropdown style="padding: 0" v-if="$auth.loggedIn" right>
 					<template v-slot:button-content>
 						<span class="text-uppercase font-weight-500 letter-spacing-1 pr-2" style="color: white">{{ $auth.user.pseudonyme }}</span>
-						<b-avatar></b-avatar>
+						<b-avatar v-if="$auth.user.uuid" square rounded :src="`http://cravatar.eu/helmavatar/${$auth.user.uuid}/${128}.png`" alt="avatar"></b-avatar>
+						<b-avatar v-else square rounded alt="avatar"></b-avatar>
 					</template>
 					<div class="dropdown-item">
 						<nuxt-link :to="`/members/${this.$auth.user.pseudonyme}/${this.$auth.user.id}`">Mon profil</nuxt-link>
@@ -45,6 +46,7 @@ export default {
 			await this.$router.push('/')
 		},
 	},
+	mounted() {},
 }
 </script>
 

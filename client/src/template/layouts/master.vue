@@ -3,7 +3,6 @@
 		<Header />
 		<Navbar />
 		<LangSwitcher />
-		{{ this.$auth.loggedIn }}
 		<Nuxt />
 	</div>
 </template>

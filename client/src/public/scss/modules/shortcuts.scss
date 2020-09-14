@@ -7,3 +7,17 @@
 .letter-spacing-2 {
 	letter-spacing: 2px;
 }
+
+.hide-sm {
+	display: none;
+	@media screen and (min-width: 576px) {
+		display: block;
+	}
+}
+
+.show-sm {
+	display: block;
+	@media screen and (min-width: 576px) {
+		display: none !important;
+	}
+}
