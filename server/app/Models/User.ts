@@ -22,7 +22,7 @@ export default class User extends BaseModel {
 	public confirmation_token: string
 
 	@column()
-	public is_conformed: boolean
+	public is_confirmed: boolean
 
 	@column()
 	public password: string
