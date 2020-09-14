@@ -1,5 +1,5 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { schema, rules } from '@ioc:Adonis/Core/Validator'
+import { schema } from '@ioc:Adonis/Core/Validator'
 
 export default class StoreValidator {
 	constructor(private ctx: HttpContextContract) {}
@@ -24,9 +24,8 @@ export default class StoreValidator {
 	 *    ```
 	 */
 	public schema = schema.create({
-		user_id: schema.number([rules.exists({ table: 'users', column: 'id' })]),
-		label_id: schema.number([rules.exists({ table: 'translations', column: 'id' })]),
-		color: schema.string()
+		fr: schema.string.optional(),
+		en: schema.string.optional()
 	})
 
 	/**
@@ -51,6 +50,7 @@ export default class StoreValidator {
 	 */
 	public messages = {
 		required: 'Le champ {{ field }} est obligatoire',
-		'color.string': 'La couleur doit-être une chaine de caractère'
+		'fr.required': 'La traduction française est obligatoire',
+		'en.required': 'La traduction anglaise est obligatoire'
 	}
 }
