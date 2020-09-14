@@ -5,18 +5,18 @@
 
 		<b-collapse id="nav-collapse" is-nav>
 			<b-navbar-nav>
-				<b-nav-item :class="{ active: this.$route.path == '/' }">
+				<li class="nav-item" :class="{ active: this.$route.path == '/' }">
 					<nuxt-link to="/" href="#" class="text-uppercase font-weight-500 letter-spacing-1">Accueil</nuxt-link>
-				</b-nav-item>
-				<b-nav-item>
+				</li>
+				<li class="nav-item">
 					<nuxt-link to="/" href="#" class="text-uppercase font-weight-500 letter-spacing-1">Forum</nuxt-link>
-				</b-nav-item>
-				<b-nav-item>
+				</li>
+				<li class="nav-item">
 					<nuxt-link to="/" href="#" class="text-uppercase font-weight-500 letter-spacing-1">Nos jeux</nuxt-link>
-				</b-nav-item>
-				<b-nav-item>
+				</li>
+				<li class="nav-item" :class="{ active: this.$route.path.split('/')[1] == 'members' }">
 					<nuxt-link to="/" href="#" class="text-uppercase font-weight-500 letter-spacing-1">Statistiques</nuxt-link>
-				</b-nav-item>
+				</li>
 			</b-navbar-nav>
 
 			<b-navbar-nav class="ml-auto">
@@ -25,7 +25,9 @@
 						<span class="text-uppercase font-weight-500 letter-spacing-1 pr-2" style="color: white">{{ $auth.user.pseudonyme }}</span>
 						<b-avatar></b-avatar>
 					</template>
-					<b-dropdown-item href="#">Mon profil</b-dropdown-item>
+					<div class="dropdown-item">
+						<nuxt-link :to="`/members/${this.$auth.user.pseudonyme}/${this.$auth.user.id}`">Mon profil</nuxt-link>
+					</div>
 					<b-dropdown-item @click="handleLogout">Se déconnecter</b-dropdown-item>
 				</b-nav-item-dropdown>
 				<nuxt-link v-else to="/authentication/login" class="btn btn-secondary">Connexion</nuxt-link>
@@ -83,7 +85,7 @@ export default {
 				&::before {
 					content: '';
 					position: absolute;
-					bottom: -18px;
+					bottom: -25px;
 					left: 50%;
 					transform: translateX(-50%);
 					width: 120%;
@@ -94,7 +96,7 @@ export default {
 				&::before {
 					content: '';
 					position: absolute;
-					bottom: -18px;
+					bottom: -25px;
 					left: 50%;
 					transform: translateX(-50%);
 					width: 120%;
