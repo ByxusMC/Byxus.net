@@ -5,7 +5,7 @@
 
 		<b-collapse id="nav-collapse" is-nav>
 			<b-navbar-nav>
-				<b-nav-item href="#">Accueil</b-nav-item>
+				<b-nav-item href="#" class="active">Accueil</b-nav-item>
 			</b-navbar-nav>
 
 			<b-navbar-nav class="ml-auto">
@@ -55,6 +55,28 @@ export default {
 	}
 	.navbar-brand {
 		color: white;
+		@media screen and (min-width: 576px) {
+			display: none;
+		}
+	}
+	.navbar-nav {
+		.nav-item {
+			a {
+				color: white;
+			}
+			&.active {
+				position: relative;
+				&::before {
+					content: '';
+					position: absolute;
+					bottom: -17px;
+					left: 50%;
+					transform: translateX(-50%);
+					width: 120%;
+					border-bottom: 5px solid $secondary-color;
+				}
+			}
+		}
 	}
 }
 </style>
