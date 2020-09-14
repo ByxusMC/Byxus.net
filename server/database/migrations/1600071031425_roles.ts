@@ -6,7 +6,6 @@ export default class Roles extends BaseSchema {
 	public async up() {
 		this.schema.createTable(this.tableName, (table) => {
 			table.increments('id')
-			table.string('label').notNullable()
 			table.string('color').notNullable()
 			table.integer('power').notNullable().unsigned()
 			table.timestamps(true, true)

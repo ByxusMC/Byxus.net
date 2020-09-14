@@ -1,5 +1,5 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { schema } from '@ioc:Adonis/Core/Validator'
+import { schema, rules } from '@ioc:Adonis/Core/Validator'
 
 export default class StoreValidator {
 	constructor(private ctx: HttpContextContract) {}
@@ -24,8 +24,8 @@ export default class StoreValidator {
 	 *    ```
 	 */
 	public schema = schema.create({
-		label: schema.string(),
 		color: schema.string(),
+		label_id: schema.number([rules.exists({ table: 'translations', column: 'id' })]),
 		power: schema.number()
 	})
 

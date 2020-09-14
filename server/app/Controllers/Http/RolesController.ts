@@ -1,40 +1,40 @@
 // import Application from '@ioc:Adonis/Core/Application'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import Rank from 'App/Models/Rank'
-import StoreValidator from 'App/Validators/ranks/StoreValidator'
-import UpdateValidator from 'App/Validators/ranks/UpdateValidator'
+import Role from 'App/Models/Role'
+import StoreValidator from 'App/Validators/roles/StoreValidator'
+import UpdateValidator from 'App/Validators/roles/UpdateValidator'
 
-export default class RanksController {
+export default class RolesController {
 	public async index() {
-		const ranks = await Rank.query()
-		return { ranks }
+		const roles = await Role.query()
+		return { roles }
 	}
 
 	public async show({ params }: HttpContextContract) {
-		const rank = await Rank.findOrFail(params.id)
-		return { rank }
+		const role = await Role.findOrFail(params.id)
+		return { role }
 	}
 
 	public async store({ request }: HttpContextContract) {
 		const data = await request.validate(StoreValidator)
-		const rank = await Rank.create(data)
+		const role = await Role.create(data)
 
-		return { rank }
+		return { role }
 	}
 
 	public async update({ request, params }: HttpContextContract) {
-		const rank = await Rank.findOrFail(params.id)
+		const role = await Role.findOrFail(params.id)
 		const data = await request.validate(UpdateValidator)
 
-		await rank.merge(data).save()
+		await role.merge(data).save()
 
 		return { message: 'Le grade a été mis à jour' }
 	}
 
 	public async destroy({ params }: HttpContextContract) {
-		const rank = await Rank.findOrFail(params.id)
+		const role = await Role.findOrFail(params.id)
 
-		rank.delete()
+		role.delete()
 		return { message: 'Le grade a bien été supprimé' }
 	}
 }
