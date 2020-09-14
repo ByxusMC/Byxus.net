@@ -1,7 +1,7 @@
 {
-	"name": "adonis-nuxt-template",
+	"name": "byxus.fr",
 	"version": "1.0.0",
-	"description": "",
+	"description": "The Byxus.fr network is a minecraft-oriented minecraft project in versions 1.8x to 1.12x. This project is innovative because it is created by players, for players",
 	"scripts": {
 		"api": "cd ./server && yarn start",
 		"front": "cd ./client && yarn dev",
@@ -9,11 +9,11 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/Izoxy/adonis-nuxt-template.git"
+		"url": "git+https://github.com:LeadcodeDev/ByxusMC.git"
 	},
 	"license": "MIT",
 	"bugs": {
-		"url": "https://github.com/Izoxy/adonis-nuxt-template/issues"
+		"url": "https://github.com:LeadcodeDev/ByxusMC.git/issues"
 	},
 	"contributors": [
 		{
@@ -27,5 +27,5 @@
 			"url": "https://github.com/HakkaOfDev"
 		}
 	],
-	"homepage": "https://github.com/Izoxy/adonis-nuxt-template#readme"
+	"homepage": "https://github.com:LeadcodeDev/ByxusMC.git#readme"
 }
