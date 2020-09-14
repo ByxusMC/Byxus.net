@@ -7,19 +7,34 @@ export default class User extends BaseModel {
 	public id: number
 
 	@column()
+	public pseudonyme: string
+
+	@column()
+	public uuid: string
+
+	@column()
 	public email: string
 
 	@column()
-	public firstname: string
+	public is_active: boolean
 
 	@column()
-	public lastname: string
+	public confirmation_token: string
+
+	@column()
+	public is_conformed: boolean
 
 	@column()
 	public password: string
 
 	@column()
 	public rememberMeToken?: string
+
+	@column()
+	public recovery_token: string
+
+	@column()
+	public is_ban: boolean
 
 	@column.dateTime({ autoCreate: true })
 	public createdAt: DateTime
