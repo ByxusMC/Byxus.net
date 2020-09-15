@@ -58,6 +58,7 @@ export default {
 }
 .b-avatar {
 	margin-right: 10px;
+	border-radius: 4px !important;
 }
 .navbar {
 	height: 70px;
