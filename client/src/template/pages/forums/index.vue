@@ -32,7 +32,7 @@
 								</div>
 								<div class="informations">
 									<div class="category-item">
-										<span class="header-information">Thread</span>
+										<span class="header-information">{{ $t('forums_threads') }}</span>
 										<p>587</p>
 									</div>
 									<div class="category-item">
@@ -94,6 +94,7 @@ export default {
 			.label {
 				h3 {
 					margin-bottom: 0;
+					color: $primary-color;
 				}
 			}
 			.informations {
