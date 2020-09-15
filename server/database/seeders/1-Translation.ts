@@ -113,6 +113,11 @@ export default class TranslationSeeder extends BaseSeeder {
 				code: 'is_now',
 				fr: 'est maintenant',
 				en: 'is now'
+			},
+			{
+				code: 'roles_update',
+				fr: 'Les rôles ont été mis à jour',
+				en: 'Roles have been updated'
 			}
 		])
 	}

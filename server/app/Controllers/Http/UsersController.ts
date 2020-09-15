@@ -7,6 +7,7 @@ import UpdateValidator from 'App/Validators/users/UpdateValidator'
 export default class UsersController {
 	public async index() {
 		const users = await User.query().preload('roles', (role) => {
+			role.orderBy('power', 'desc')
 			role.preload('label')
 		})
 		return { users }
@@ -15,6 +16,7 @@ export default class UsersController {
 	public async show({ params }: HttpContextContract) {
 		const user = await User.findOrFail(params.id)
 		await user.preload('roles', (role) => {
+			role.orderBy('power', 'desc')
 			role.preload('label')
 		})
 		return { user }
@@ -33,7 +35,7 @@ export default class UsersController {
 		const data = await request.validate(UpdateValidator)
 
 		await user.merge(data).save()
-		if (roles.length != 0) {
+		if (roles) {
 			await user.related('roles').sync(roles)
 		}
 

@@ -6,26 +6,36 @@
 					{{ user.pseudonyme }}
 				</h1>
 				<div class="badge-container">
-					<div
-						v-for="(role, key) in user.roles"
-						class="badge"
-						:style="'color: white; background-color:' + role.color"
-						:key="key"
-					>
+					<div v-for="(role, key) in user.roles" class="badge" :style="'color: white; background-color:' + role.color" :key="key">
 						{{ $t(role.label.code) }}
+					</div>
+				</div>
+				<div v-if="hasRole('update')" class="button-add-roles">
+					<button class="btn btn-primary" @click.prevent="buttonRolesAdd = !buttonRolesAdd">
+						<i class="icon-plus"></i>
+					</button>
+					<div class="card roles-list" :class="{ active: buttonRolesAdd }">
+						<div class="card-body">
+							<p v-for="(role, key) in roles" :value="role.id" :key="key" @click="handleAddRole(role.id)">{{ $t(role.label.code) }}</p>
+						</div>
 					</div>
 				</div>
 			</div>
 			<div class="avatar">
 				<img :src="`http://cravatar.eu/helmavatar/${user.uuid}/${256}.png`" alt="avatar" />
 				<div class="badge-container hide-sm">
-					<div
-						v-for="(role, key) in user.roles"
-						class="badge"
-						:style="'color: white; background-color:' + role.color"
-						:key="key"
-					>
+					<div v-for="(role, key) in user.roles" class="badge" :style="'color: white; background-color:' + role.color" :key="key">
 						{{ $t(role.label.code) }}
+					</div>
+				</div>
+				<div v-if="hasRole('update')" class="button-add-roles hide-sm">
+					<button class="btn btn-primary" @click.prevent="buttonRolesAdd = !buttonRolesAdd">
+						<i class="icon-plus"></i>
+					</button>
+					<div class="card roles-list" :class="{ active: buttonRolesAdd }">
+						<div class="card-body">
+							<p v-for="(role, key) in roles" :value="role.id" :key="key" @click="handleAddRole(role.id)">{{ $t(role.label.code) }}</p>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -36,26 +46,14 @@
 						<h1 class="hide-sm mb-5" :aria-label="user.pseudonyme + '\'s profil'">
 							{{ user.pseudonyme }}
 						</h1>
-						<div class="actions">
+						<div v-if="hasRole('update')" class="actions">
 							<div class="btn-group" role="group" aria-label="Basic example">
-								<template v-if="hasRole('update')">
-									<button
-										v-if="user.is_ban"
-										type="button"
-										class="btn btn-danger"
-										@click.prevent="handleSwitchBan"
-									>
-										{{ $t('players_is_ban') }}
-									</button>
-									<button
-										v-else
-										type="button"
-										class="btn btn-success"
-										@click.prevent="handleSwitchBan"
-									>
-										{{ $t('players_is_unban') }}
-									</button>
-								</template>
+								<button v-if="user.is_ban" type="button" class="btn btn-danger" @click.prevent="handleSwitchBan">
+									{{ $t('players_is_ban') }}
+								</button>
+								<button v-else type="button" class="btn btn-success" @click.prevent="handleSwitchBan">
+									{{ $t('players_is_unban') }}
+								</button>
 								<button type="button" class="btn btn-secondary">Middle</button>
 								<button type="button" class="btn btn-secondary">Right</button>
 							</div>
@@ -87,17 +85,44 @@ export default {
 	data() {
 		return {
 			loading: true,
+			user: {},
+			roles: [],
+			currentRoles: [],
 			module: {
 				create: [],
 				update: [],
 				destroy: [],
 			},
-			user: {},
+			buttonRolesAdd: false,
 		}
 	},
 	methods: {
 		hasRole(action) {
 			return RolesGuard.firewall(this.$auth.user, this.module, action)
+		},
+		async handleAddRole(id) {
+			if (this.currentRoles.includes(id)) {
+				const index = this.currentRoles.indexOf(id)
+				this.currentRoles.splice(index, 1)
+				this.user.roles.splice(index, 1)
+			} else {
+				this.currentRoles.push(id)
+				this.user.roles.push(this.roles.find((role) => role.id == id))
+			}
+			this.buttonRolesAdd = false
+
+			try {
+				console.log('{ roles: this.currentRoles }', { roles: this.currentRoles || [] })
+				await this.$axios.put('/users/' + this.user.id, { roles: this.currentRoles })
+				this.$toast.success(this.$t('roles_update'))
+			} catch (error) {
+				const { errors } = error.response.data
+				if (errors.length != 0) {
+					errors.forEach((error) => {
+						this.$toast.error(error.message)
+					})
+				}
+			}
 		},
 		async handleSwitchBan() {
 			try {
@@ -110,7 +135,7 @@ export default {
 					${this.$t('is_now')}
 					${this.user.is_ban ? this.$t('players_is_ban') : this.$t('players_is_unban')}`)
 			} catch (error) {
-				const { errors } = error.data.response
+				const { errors } = error.response.data
 				if (errors.length != 0) {
 					errors.forEach((error) => {
 						this.$toast.error(error.message)
@@ -121,8 +146,15 @@ export default {
 	},
 	async mounted() {
 		const { data: u } = await this.$axios.get('/users/' + this.$route.params.id)
+		const { data: r } = await this.$axios.get('/roles')
 		const { data: m } = await this.$axios.get('/modules/1')
+
+		let array = []
+		u.user.roles.forEach((role) => array.push(role.id))
+
 		this.user = u.user
+		this.roles = r.roles
+		this.currentRoles = array
 		this.module = m.module
 		this.loading = false
 	},
@@ -130,6 +162,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '~public/scss/modules/variables.scss';
+
 .profil-section {
 	padding: 3rem 0;
 	.container {
@@ -148,14 +182,15 @@ export default {
 			}
 			@media screen and (min-width: 1400px) {
 				padding: 0 2rem;
+				justify-content: flex-start;
 			}
 			img {
 				width: 128px;
 				height: 128px;
 				border-radius: 12px;
 				@media screen and (min-width: 1400px) {
-					width: 200px;
-					height: 200px;
+					width: 256px;
+					height: 256px;
 				}
 			}
 			.badge-container {
@@ -191,7 +226,7 @@ export default {
 	}
 }
 .badge-container {
-	width: 100%;
+	width: 80%;
 	display: flex;
 	flex-wrap: wrap;
 	.badge {
@@ -202,6 +237,49 @@ export default {
 		@media screen and (min-width: 1400px) {
 			padding: 5px 10px;
 			font-size: 18px;
+		}
+	}
+}
+.button-add-roles {
+	position: relative;
+	display: flex;
+	width: 20%;
+	align-self: center;
+	justify-content: right;
+	@media screen and (min-width: 1400px) {
+		width: fit-content;
+		margin-top: 2rem;
+	}
+	.btn {
+		width: 32px;
+		height: 32px;
+		i {
+			color: white;
+		}
+	}
+	.roles-list {
+		display: none;
+		max-width: 150px;
+		max-height: 250px;
+		overflow-y: scroll;
+		background: white;
+		p {
+			width: 100%;
+			cursor: pointer;
+		}
+		&.active {
+			display: flex;
+			flex-wrap: wrap;
+			position: absolute;
+			z-index: 999;
+			top: 50px;
+			right: 0;
+			@media screen and (min-width: 1400px) {
+				top: initial;
+				left: 0;
+				right: initial;
+				bottom: 50px;
+			}
 		}
 	}
 }

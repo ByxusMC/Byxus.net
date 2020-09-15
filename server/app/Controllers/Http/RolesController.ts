@@ -6,12 +6,13 @@ import UpdateValidator from 'App/Validators/roles/UpdateValidator'
 
 export default class RolesController {
 	public async index() {
-		const roles = await Role.query()
+		const roles = await Role.query().preload('label')
 		return { roles }
 	}
 
 	public async show({ params }: HttpContextContract) {
 		const role = await Role.findOrFail(params.id)
+		await role.preload('label')
 		return { role }
 	}
 

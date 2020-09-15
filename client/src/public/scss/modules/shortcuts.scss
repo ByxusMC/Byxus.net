@@ -9,9 +9,8 @@
 }
 
 .hide-sm {
-	display: none;
-	@media screen and (min-width: 576px) {
-		display: block;
+	@media screen and (max-width: 575px) {
+		display: none !important;
 	}
 }
 
