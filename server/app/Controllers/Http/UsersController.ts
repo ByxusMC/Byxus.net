@@ -31,7 +31,7 @@ export default class UsersController {
 
 	public async update({ request, params }: HttpContextContract) {
 		const user = await User.findOrFail(params.id)
-		const roles = await request.input('roles', [])
+		const roles = await request.input('roles')
 		const data = await request.validate(UpdateValidator)
 
 		await user.merge(data).save()

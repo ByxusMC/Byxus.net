@@ -2,13 +2,9 @@
 	<div class="profil-section">
 		<div class="container">
 			<div class="container show-sm mb-5">
-				<h1 class="display-4" :aria-label="user.pseudonyme + '\'s profil'">
-					{{ user.pseudonyme }}
-				</h1>
+				<h1 class="display-4" :aria-label="user.pseudonyme + '\'s profil'">{{ user.pseudonyme }}</h1>
 				<div class="badge-container">
-					<div v-for="(role, key) in user.roles" class="badge" :style="'color: white; background-color:' + role.color" :key="key">
-						{{ $t(role.label.code) }}
-					</div>
+					<div v-for="(role, key) in user.roles" class="badge" :style="'color: white; background-color:' + role.color" :key="key">{{ $t(role.label.code) }}</div>
 				</div>
 				<div v-if="hasRole('update')" class="button-add-roles">
 					<button class="btn btn-primary" @click.prevent="buttonRolesAdd = !buttonRolesAdd">
@@ -24,9 +20,7 @@
 			<div class="avatar">
 				<img :src="`http://cravatar.eu/helmavatar/${user.uuid}/${256}.png`" alt="avatar" />
 				<div class="badge-container hide-sm">
-					<div v-for="(role, key) in user.roles" class="badge" :style="'color: white; background-color:' + role.color" :key="key">
-						{{ $t(role.label.code) }}
-					</div>
+					<div v-for="(role, key) in user.roles" class="badge" :style="'color: white; background-color:' + role.color" :key="key">{{ $t(role.label.code) }}</div>
 				</div>
 				<div v-if="hasRole('update')" class="button-add-roles hide-sm">
 					<button class="btn btn-primary" @click.prevent="buttonRolesAdd = !buttonRolesAdd">
@@ -43,30 +37,24 @@
 			<div class="data">
 				<div class="container">
 					<div class="d-flex w-100 justify-content-between">
-						<h1 class="hide-sm mb-5" :aria-label="user.pseudonyme + '\'s profil'">
-							{{ user.pseudonyme }}
-						</h1>
+						<h1 class="hide-sm mb-5" :aria-label="user.pseudonyme + '\'s profil'">{{ user.pseudonyme }}</h1>
 						<div v-if="hasRole('update')" class="actions">
 							<div class="btn-group" role="group" aria-label="Basic example">
-								<button v-if="user.is_ban" type="button" class="btn btn-danger" @click.prevent="handleSwitchBan">
-									{{ $t('players_is_ban') }}
-								</button>
-								<button v-else type="button" class="btn btn-success" @click.prevent="handleSwitchBan">
-									{{ $t('players_is_unban') }}
-								</button>
+								<button v-if="user.is_ban" type="button" class="btn btn-danger" @click.prevent="handleSwitchBan">{{ $t('players_is_ban') }}</button>
+								<button v-else type="button" class="btn btn-success" @click.prevent="handleSwitchBan">{{ $t('players_is_unban') }}</button>
 								<button type="button" class="btn btn-secondary">Middle</button>
 								<button type="button" class="btn btn-secondary">Right</button>
 							</div>
 						</div>
 					</div>
 					<div class="data-item">
-						<h2 class="h4">UUID</h2>
+						<h2 class="h4 no-styling">UUID</h2>
 						<div class="card">
 							<div class="card-body">{{ user.uuid }}</div>
 						</div>
 					</div>
 					<div class="data-item">
-						<h2 class="h4">Email</h2>
+						<h2 class="h4 no-styling">Email</h2>
 						<div class="card">
 							<div class="card-body">{{ user.email }}</div>
 						</div>
@@ -127,6 +115,8 @@ export default {
 		async handleSwitchBan() {
 			try {
 				this.user = { ...this.user, is_ban: !this.user.is_ban }
+				let array = []
+				this.user.roles.forEach((role) => array.push(role.id))
 
 				await this.$axios.put('/users/' + this.user.id, { is_ban: this.user.is_ban })
 				const status = this.user.is_ban ? this.$t('players_is_ban') : this.$t('players_is_unban')

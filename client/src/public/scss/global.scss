@@ -14,12 +14,12 @@ body {
 	color: $text-color;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
+h1:not(.no-styling),
+h2:not(.no-styling),
+h3:not(.no-styling),
+h4:not(.no-styling),
+h5:not(.no-styling),
+h6:not(.no-styling) {
 	position: relative;
 	width: fit-content;
 	&::before {

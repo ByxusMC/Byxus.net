@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('fonts/icomoon.eot?y6wz4m');
-  src:  url('fonts/icomoon.eot?y6wz4m#iefix') format('embedded-opentype'),
-    url('fonts/icomoon.ttf?y6wz4m') format('truetype'),
-    url('fonts/icomoon.woff?y6wz4m') format('woff'),
-    url('fonts/icomoon.svg?y6wz4m#icomoon') format('svg');
+  src:  url('fonts/icomoon.eot?7ymmmh');
+  src:  url('fonts/icomoon.eot?7ymmmh#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?7ymmmh') format('truetype'),
+    url('fonts/icomoon.woff?7ymmmh') format('woff'),
+    url('fonts/icomoon.svg?7ymmmh#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -34,8 +34,23 @@
 .icon-twitter:before {
   content: "\f042";
 }
+.icon-comment-dots:before {
+  content: "\eac0";
+}
+.icon-comments-alt:before {
+  content: "\eac9";
+}
+.icon-info-circle:before {
+  content: "\ec9c";
+}
 .icon-plus:before {
   content: "\e905";
+}
+.icon-question-circle:before {
+  content: "\ede5";
+}
+.icon-scroll:before {
+  content: "\ee3a";
 }
 .icon-home-alt1:before {
   content: "\f03d";

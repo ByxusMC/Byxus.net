@@ -1,6 +1,6 @@
 class RolesGuards {
 	/**
-	 *
+	 * Allow or disallow administration mode
 	 * @param user
 	 * @param module
 	 * @param action
@@ -14,7 +14,7 @@ class RolesGuards {
 			if (role.id === 1 || role.id === 2) hasRole = true
 		})
 
-		module[action].forEach((moduleRole: any) => {
+		module[action].forEach((moduleRole: { id: number }) => {
 			const { id } = moduleRole
 			roles.forEach((userRole: any) => {
 				if (id === userRole.id) {
