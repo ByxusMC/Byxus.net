@@ -25,7 +25,6 @@ export default class StoreValidator {
 	 */
 	public schema = schema.create({
 		pseudonyme: schema.string({ trim: true }),
-		// uuid: schema.string({ trim: true }, [rules.regex(/[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}/)]),
 		email: schema.string({ trim: true }, [rules.email(), rules.unique({ table: 'users', column: 'email' })]),
 		password: schema.string({ trim: true }, [rules.confirmed()])
 	})

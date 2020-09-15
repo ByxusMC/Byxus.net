@@ -38,7 +38,24 @@
 						</h1>
 						<div class="actions">
 							<div class="btn-group" role="group" aria-label="Basic example">
-								<button type="button" class="btn btn-secondary">Left</button>
+								<template v-if="hasRole('update')">
+									<button
+										v-if="user.is_ban"
+										type="button"
+										class="btn btn-danger"
+										@click.prevent="handleSwitchBan"
+									>
+										{{ $t('players_is_ban') }}
+									</button>
+									<button
+										v-else
+										type="button"
+										class="btn btn-success"
+										@click.prevent="handleSwitchBan"
+									>
+										{{ $t('players_is_unban') }}
+									</button>
+								</template>
 								<button type="button" class="btn btn-secondary">Middle</button>
 								<button type="button" class="btn btn-secondary">Right</button>
 							</div>
@@ -63,16 +80,44 @@
 </template>
 
 <script>
+import { RolesGuard } from '~/utils'
+
 export default {
 	layout: 'master',
 	data() {
 		return {
 			loading: true,
+			module: {
+				create: [],
+				update: [],
+				destroy: [],
+			},
 			user: {},
 		}
 	},
 	methods: {
-		async hasRoles() {},
+		hasRole(action) {
+			return RolesGuard.firewall(this.$auth.user, this.module, action)
+		},
+		async handleSwitchBan() {
+			try {
+				this.user = { ...this.user, is_ban: !this.user.is_ban }
+
+				await this.$axios.put('/users/' + this.user.id, { is_ban: this.user.is_ban })
+				const status = this.user.is_ban ? this.$t('players_is_ban') : this.$t('players_is_unban')
+				this.$toast.success(`
+					${this.user.pseudonyme}
+					${this.$t('is_now')}
+					${this.user.is_ban ? this.$t('players_is_ban') : this.$t('players_is_unban')}`)
+			} catch (error) {
+				const { errors } = error.data.response
+				if (errors.length != 0) {
+					errors.forEach((error) => {
+						this.$toast.error(error.message)
+					})
+				}
+			}
+		},
 	},
 	async mounted() {
 		const { data: u } = await this.$axios.get('/users/' + this.$route.params.id)

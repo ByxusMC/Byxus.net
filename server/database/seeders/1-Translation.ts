@@ -98,6 +98,21 @@ export default class TranslationSeeder extends BaseSeeder {
 				code: 'WVum9UMpU6HxBmDnKXO8cU5iG3BsToj8',
 				fr: 'Forums',
 				en: 'Forums'
+			},
+			{
+				code: 'players_is_ban',
+				fr: 'Banni',
+				en: 'Banned'
+			},
+			{
+				code: 'players_is_unban',
+				fr: 'Non banni',
+				en: 'Not banned'
+			},
+			{
+				code: 'is_now',
+				fr: 'est maintenant',
+				en: 'is now'
 			}
 		])
 	}
