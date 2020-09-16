@@ -7,7 +7,7 @@ export default class Forums extends BaseSchema {
 		this.schema.createTable(this.tableName, (table) => {
 			table.increments('id')
 			table.integer('label_id').unsigned().references('id').inTable('translations')
-			table.timestamps(true)
+			table.timestamps(true, true)
 		})
 	}
 
