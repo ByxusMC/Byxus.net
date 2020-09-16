@@ -11,8 +11,11 @@ export default class ForumsController {
 	}
 
 	public async show({ params }: HttpContextContract) {
-		const forum = await Forum.findOrFail(params.id)
-		await forum.preload('label')
+		const forum = await Forum.query()
+			.where('id', params.id)
+			.preload('label')
+			.preload('categories')
+			.firstOrFail()
 		return { forum }
 	}
 
@@ -29,13 +32,13 @@ export default class ForumsController {
 
 		await forum.merge(data).save()
 
-		return { message: 'Le grade a été mis à jour' }
+		return { message: 'Le forum a été mis à jour' }
 	}
 
 	public async destroy({ params }: HttpContextContract) {
 		const forum = await Forum.findOrFail(params.id)
 
 		forum.delete()
-		return { message: 'Le grade a bien été supprimé' }
+		return { message: 'Le forum a bien été supprimé' }
 	}
 }
