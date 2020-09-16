@@ -34,6 +34,7 @@ Route.group(() => {
 	Route.resource('categories', 'CategoriesController')
 		.apiOnly()
 		.middleware({})
+	Route.resource('posts', 'PostsController').apiOnly().middleware({})
 
 	Route.get('/authentication/user/me', 'AuthController.user').middleware(
 		'auth'

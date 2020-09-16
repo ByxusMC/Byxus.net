@@ -18,8 +18,8 @@ export default class Posts extends BaseSchema {
 				.inTable('users')
 			table.string('label').notNullable()
 			table.string('description').notNullable()
-			table.boolean('is_resolved').defaultTo(false)
-			table.boolean('can_reply').defaultTo(true)
+			table.boolean('is_resolved').notNullable().defaultTo(false)
+			table.boolean('can_reply').notNullable().defaultTo(true)
 			table.timestamps(true, true)
 		})
 	}

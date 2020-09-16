@@ -6,8 +6,36 @@ import UpdateValidator from 'App/Validators/forums/UpdateValidator'
 
 export default class ForumsController {
 	public async index() {
-		const forums = await Forum.query().preload('label')
-		return { forums }
+		let postCount: number = 0
+		let messageCount: number = 0
+
+		const forums = await Forum.query()
+			.preload('label')
+			.preload('categories', (categorie) => {
+				categorie.preload('label')
+				categorie.withCount('posts')
+				categorie.preload('posts', (post) => {
+					post.select(['id'])
+					post.withCount('comments')
+				})
+			})
+
+		forums.forEach((forum) => {
+			forum.categories.forEach((category) => {
+				postCount = postCount + category.$extras.posts_count
+				category.posts.forEach((post) => {
+					messageCount = messageCount + post.$extras.comments_count
+				})
+			})
+		})
+
+		return {
+			forums,
+			count: {
+				postCount,
+				messageCount
+			}
+		}
 	}
 
 	public async show({ params }: HttpContextContract) {
