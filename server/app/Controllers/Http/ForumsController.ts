@@ -10,10 +10,15 @@ export default class ForumsController {
 		let messageCount: number = 0
 
 		const forums = await Forum.query()
-			.preload('label')
+			.preload('label', (label) => {
+				label.select(['id', 'code', 'fr', 'en'])
+			})
 			.preload('categories', (categorie) => {
-				categorie.preload('label')
+				categorie.preload('label', (label) => {
+					label.select(['id', 'code', 'fr', 'en'])
+				})
 				categorie.withCount('posts')
+				categorie.limit(5)
 				categorie.preload('posts', (post) => {
 					post.select(['id'])
 					post.withCount('comments')
