@@ -26,7 +26,7 @@
 							<div class="forum-category">
 								<div class="label">
 									<i class="icon-comment-dots"></i>
-									<nuxt-link to="/forums/forum_slug/category_slug/" class="h6 no-styling"> Catégorie 1 </nuxt-link>
+									<nuxt-link to="/forums/forum_slug/category_slug/" class="h6 no-styling">Catégorie 1</nuxt-link>
 								</div>
 								<div class="informations">
 									<div class="category-item">

@@ -24,6 +24,9 @@ export default class ForumsController {
 					post.withCount('comments')
 				})
 			})
+			.preload('roles', (role) => {
+				role.preload('label')
+			})
 
 		forums.forEach((forum) => {
 			forum.categories.forEach((category) => {
