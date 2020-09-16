@@ -1,20 +1,19 @@
 import { DateTime } from 'luxon'
-import { BaseModel, BelongsTo, belongsTo, column, HasMany, hasMany } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
 import Translation from 'App/Models/Translation'
-import Category from 'App/Models/Category'
 
-export default class Forum extends BaseModel {
+export default class Category extends BaseModel {
 	@column({ isPrimary: true })
 	public id: number
+
+	@column()
+	public forumId: number
 
 	@column()
 	public labelId: number
 
 	@belongsTo(() => Translation, { foreignKey: 'labelId' })
 	public label: BelongsTo<typeof Translation>
-
-	@hasMany(() => Category)
-	public categories: HasMany<typeof Category>
 
 	@column.dateTime({ autoCreate: true })
 	public createdAt: DateTime
