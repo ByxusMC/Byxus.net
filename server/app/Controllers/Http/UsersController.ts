@@ -17,7 +17,9 @@ export default class UsersController {
 		const user = await User.findOrFail(params.id)
 		await user.preload('roles', (role) => {
 			role.orderBy('power', 'desc')
-			role.preload('label')
+			role.preload('label', (label) => {
+				label.select(['code'])
+			})
 		})
 		return { user }
 	}
