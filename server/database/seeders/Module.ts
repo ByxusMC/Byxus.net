@@ -9,6 +9,9 @@ export default class ModuleSeeder extends BaseSeeder {
 			},
 			{
 				labelId: 19
+			},
+			{
+				labelId: 25
 			}
 		])
 	}

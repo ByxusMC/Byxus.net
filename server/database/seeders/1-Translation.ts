@@ -123,6 +123,11 @@ export default class TranslationSeeder extends BaseSeeder {
 				code: 'forums_threads',
 				fr: 'Discussions',
 				en: 'Thread'
+			},
+			{
+				code: 'WVum9UMpU6HxBmDnKXO8cU5iG3BsToj4',
+				fr: 'Catégories',
+				en: 'Categories'
 			}
 		])
 	}
