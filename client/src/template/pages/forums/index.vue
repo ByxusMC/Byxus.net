@@ -22,13 +22,11 @@
 					</div>
 					<hr />
 					<div class="container">
-						<div v-for="(y, index) in 7" :key="index">
+						<div v-for="(y, index) in 3" :key="index">
 							<div class="forum-category">
 								<div class="label">
-									<h3 class="h6 no-styling">
-										<i class="icon-comment-dots"></i>
-										Catégorie 1
-									</h3>
+									<i class="icon-comment-dots"></i>
+									<nuxt-link to="/forums/forum_slug/category_slug/" class="h6 no-styling"> Catégorie 1 </nuxt-link>
 								</div>
 								<div class="informations">
 									<div class="category-item">
@@ -70,10 +68,8 @@ export default {
 		},
 	},
 	async mounted() {
-		const { data: r } = await this.$axios.get('/roles')
 		const { data: m } = await this.$axios.get('/modules/2')
 
-		this.roles = r.roles
 		this.module = m.module
 		this.loading = false
 	},
@@ -92,9 +88,13 @@ export default {
 			justify-content: space-between;
 			align-items: center;
 			.label {
-				h3 {
+				a {
 					margin-bottom: 0;
 					color: $primary-color;
+					text-decoration: none;
+					&:hover {
+						color: $secondary-color;
+					}
 				}
 			}
 			.informations {

@@ -2,7 +2,7 @@
 	<div class="forum-section">
 		<div class="container">
 			<div class="d-flex justify-content-between">
-				<h1>Forums name :)</h1>
+				<h1>POST name</h1>
 				<div v-if="hasRole('create') || hasRole('update') || hasRole('destroy')" class="actions">
 					<button type="button" class="btn btn-secondary">
 						<i class="icon-plus" style="color: white"></i>
@@ -12,19 +12,15 @@
 			<div class="forum-card card">
 				<div class="card-body">
 					<div class="container">
-						<div v-for="(y, index) in 15" :key="index">
+						<div v-for="(y, index) in 1" :key="index">
 							<div class="forum-category">
 								<div class="label">
-									<nuxt-link to="/forums/forum_slug/category_slug/post_slug/1" class="h6 no-styling">
+									<h3 class="h6 no-styling">
 										<i class="icon-comment-dots"></i>
-										Post 1
-									</nuxt-link>
+										Catégorie 1
+									</h3>
 								</div>
 								<div class="informations">
-									<div class="category-item">
-										<span class="header-information">{{ $t('forums_threads') }}</span>
-										<p>587</p>
-									</div>
 									<div class="category-item">
 										<span class="header-information">Messages</span>
 										<p>587</p>

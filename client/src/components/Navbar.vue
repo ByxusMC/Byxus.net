@@ -5,10 +5,10 @@
 
 		<b-collapse id="nav-collapse" is-nav>
 			<b-navbar-nav>
-				<li class="nav-item" :class="{ active: this.$route.path == '/' }">
+				<li class="nav-item" :class="{ active: this.$route.path.split('/')[1] == '' }">
 					<nuxt-link to="/" href="#" class="text-uppercase font-weight-500 letter-spacing-1">Accueil</nuxt-link>
 				</li>
-				<li class="nav-item" :class="{ active: this.$route.path == '/forums' }">
+				<li class="nav-item" :class="{ active: this.$route.path.split('/')[1] == 'forums' }">
 					<nuxt-link to="/forums" href="#" class="text-uppercase font-weight-500 letter-spacing-1">Forum</nuxt-link>
 				</li>
 				<li class="nav-item">
