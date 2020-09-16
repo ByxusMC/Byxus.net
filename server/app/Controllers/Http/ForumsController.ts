@@ -59,7 +59,8 @@ export default class ForumsController {
 		const data = await request.validate(StoreValidator)
 		const roles = request.input('roles')
 		const forum = await Forum.create(data)
-		await forum.related('roles').sync(roles)
+
+		// await forum.related('roles').sync(roles)
 
 		return { forum }
 	}

@@ -20,8 +20,14 @@ export default class Forum extends BaseModel {
 	@column()
 	public labelId: number
 
+	@column()
+	public slugId: number
+
 	@belongsTo(() => Translation, { foreignKey: 'labelId' })
 	public label: BelongsTo<typeof Translation>
+
+	@belongsTo(() => Translation, { foreignKey: 'slugId' })
+	public slug: BelongsTo<typeof Translation>
 
 	@hasMany(() => Category)
 	public categories: HasMany<typeof Category>

@@ -4,52 +4,128 @@
 			<div class="d-flex justify-content-between">
 				<h1>Forums byxus.fr</h1>
 				<div v-if="hasRole('create') || hasRole('update') || hasRole('destroy')" class="actions">
-					<button type="button" class="btn btn-secondary">
+					<button type="button" class="btn btn-secondary" v-b-modal.new-forum>
 						<i class="icon-plus" style="color: white"></i>
 					</button>
 				</div>
 			</div>
-			<div v-for="(n, key) in 5" class="forum-card card" :key="key">
-				<div class="card-body">
-					<div class="d-flex justify-content-between">
-						<h2 class="no-styling">
-							<i class="icon-comments-alt"></i>
-							Forum {{ n }}
-						</h2>
-						<div v-if="hasRole('update')" class="actions">
-							<button type="button" class="btn btn-secondary">Modifier le nom</button>
-						</div>
-					</div>
-					<hr />
-					<div class="container">
-						<div v-for="(y, index) in 3" :key="index">
-							<div class="forum-category">
-								<div class="label">
-									<i class="icon-comment-dots"></i>
-									<nuxt-link to="/forums/forum_slug/category_slug/" class="h6 no-styling">Catégorie 1</nuxt-link>
-								</div>
-								<div class="informations">
-									<div class="category-item">
-										<span class="header-information">{{ $t('forums_threads') }}</span>
-										<p>587</p>
-									</div>
-									<div class="category-item">
-										<span class="header-information">Messages</span>
-										<p>587</p>
-									</div>
+			<template v-if="forums.length != 0">
+				<div v-for="(forum, key) in forums" class="forum-card card" :key="key">
+					<div class="card-body">
+						<div class="d-flex justify-content-between">
+							<h2 class="no-styling">
+								<i class="icon-comments-alt"></i>
+								{{ $t(forum.label.code) }}
+							</h2>
+							<div v-if="hasRole('update')" class="actions">
+								<div class="btn-group" role="group" aria-label="Basic example">
+									<button type="button" class="btn btn-info btn-sm">
+										<i class="icon-edit text-white"></i>
+									</button>
+									<button type="button" class="btn btn-primary btn-sm">
+										<i class="icon-plus text-white"></i>
+									</button>
+									<button
+										type="button"
+										class="btn btn-danger btn-sm"
+										@click.prevent="handleDelete(forum.id, key)"
+									>
+										<i class="icon-ban text-white"></i>
+									</button>
 								</div>
 							</div>
-							<hr />
+						</div>
+						<hr />
+						<div class="container">
+							<div v-for="(category, index) in forum.categories" :key="index">
+								<div class="forum-category">
+									<div class="label">
+										<i class="icon-comment-dots"></i>
+										<nuxt-link
+											:to="`/forums/${$t(forum.label.code)}/${$t(category.label.code)}/`"
+											class="h6 no-styling"
+										>{{ $t(category.label.code)}}</nuxt-link>
+									</div>
+									<div class="informations">
+										<div class="category-item">
+											<span class="header-information">{{ $t('forums_threads') }}</span>
+											<p>587</p>
+										</div>
+										<div class="category-item">
+											<span class="header-information">Messages</span>
+											<p>587</p>
+										</div>
+									</div>
+								</div>
+								<hr />
+							</div>
+						</div>
+					</div>
+				</div>
+			</template>
+			<template v-else>
+				<div class="forum-card card">
+					<div class="card-body">
+						<div class="d-flex justify-content-between">
+							<h2 class="h6 no-styling m-0">
+								Aucun forum n'a été trouvé 😥
+								<span v-if="hasRole('update')">
+									Créez votre premier forum en cliquant
+									<span
+										class="font-weight-bold text-secondary"
+										style="cursor: pointer;"
+										v-b-modal.new-forum
+									>ici</span>
+								</span>
+							</h2>
+						</div>
+					</div>
+				</div>
+			</template>
+		</div>
+		<b-modal class="new-forum" id="new-forum">
+			<template v-slot:modal-title>Nouveau forum</template>
+			<div class="my-2">
+				<div class="row">
+					<div class="col-md-6">
+						<div class="form-group label">
+							<label for="label-fr">Nom du forum (FR)</label>
+							<input type="text" name="label-fr" class="form-control" v-model="form.translations.label.fr" />
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="form-group label">
+							<label for="label-en">Nom du forum (EN)</label>
+							<input type="text" name="label-en" class="form-control" v-model="form.translations.label.en" />
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-6">
+						<div class="form-group label">
+							<label for="slug-fr">Affichage dans l'URL (FR)</label>
+							<input type="text" name="slug-fr" class="form-control" v-model="form.translations.slug.fr" />
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="form-group label">
+							<label for="slug-en">Affichage dans l'URL (EN)</label>
+							<input type="text" name="slug-en" class="form-control" v-model="form.translations.slug.en" />
 						</div>
 					</div>
 				</div>
 			</div>
-		</div>
+			<template v-slot:modal-footer>
+				<div class="w-100">
+					<b-button variant="primary" size="sm" class="float-right" @click.prevent="handleSubmit">Valider</b-button>
+				</div>
+			</template>
+		</b-modal>
 	</div>
 </template>
 
 <script>
-import { RolesGuard } from '~/utils'
+import { RolesGuard, I18N } from '~/utils'
 
 export default {
 	layout: 'master',
@@ -60,17 +136,64 @@ export default {
 				update: [],
 				destroy: [],
 			},
+			forums: [],
+			form: {
+				translations: {
+					slug: {
+						fr: '',
+						en: '',
+					},
+					label: {
+						fr: '',
+						en: '',
+					},
+				},
+			},
 		}
 	},
 	methods: {
 		hasRole(action) {
 			return RolesGuard.firewall(this.$auth.user, this.module, action)
 		},
+		async handleSubmit() {
+			try {
+				let { data: label } = await this.$axios.post('/translations', this.form.translations.label)
+				this.updateTranslations(label)
+
+				const { data: slug } = await this.$axios.post('/translations', this.form.translations.slug)
+				this.updateTranslations(slug)
+
+				const { data } = await this.$axios.post('/forums', { labelId: label.translation.id, slugId: slug.translation.id })
+				this.getForums()
+
+				this.$toast.success(`Le forum a été mis à jour`)
+				this.$bvModal.hide('new-forum')
+				this.form.translations = { slug: { fr: '', en: '' }, label: { fr: '', en: '' } }
+			} catch (error) {
+				error.response.data.errors.forEach((error) => {
+					this.$toast.error(error.message)
+				})
+			}
+		},
+		async handleDelete(id, key) {
+			const { data } = await this.$axios.delete('/forums/' + id)
+			this.forums.splice(key, 1)
+			this.$toast.success(data.message)
+		},
+		updateTranslations(item) {
+			const { code, fr, en } = item.translation
+			I18N.upateTranslations(this.$i18n, 'fr', [code], fr)
+			I18N.upateTranslations(this.$i18n, 'en', [code], en)
+		},
+		async getForums() {
+			const { data: f } = await this.$axios.get('/forums')
+			this.forums = f.forums
+		},
 	},
 	async mounted() {
-		const { data: m } = await this.$axios.get('/modules/2')
-
-		this.module = m.module
+		const { data } = await this.$axios.get('/modules/2')
+		this.getForums()
+		this.module = data.module
 		this.loading = false
 	},
 }
