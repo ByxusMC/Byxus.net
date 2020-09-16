@@ -24,7 +24,9 @@ export default class StoreValidator {
 	 *    ```
 	 */
 	public schema = schema.create({
-		labelId: schema.number([rules.exists({ table: 'translations', column: 'id' })])
+		labelId: schema.number.optional([
+			rules.exists({ table: 'translations', column: 'id' })
+		])
 	})
 
 	/**

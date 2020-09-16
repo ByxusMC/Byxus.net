@@ -54,16 +54,22 @@ export default class ForumsController {
 
 	public async store({ request }: HttpContextContract) {
 		const data = await request.validate(StoreValidator)
+		const roles = request.input('roles')
 		const forum = await Forum.create(data)
+		await forum.related('roles').sync(roles)
 
 		return { forum }
 	}
 
 	public async update({ request, params }: HttpContextContract) {
+		const roles = request.input('roles')
 		const forum = await Forum.findOrFail(params.id)
 		const data = await request.validate(UpdateValidator)
 
 		await forum.merge(data).save()
+		if (roles) {
+			await forum.related('roles').sync(roles)
+		}
 
 		return { message: 'Le forum a été mis à jour' }
 	}
