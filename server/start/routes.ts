@@ -25,6 +25,7 @@ Route.group(() => {
 	Route.resource('roles', 'RolesController').apiOnly().middleware({})
 	Route.resource('translations', 'TranslationsController').apiOnly().middleware({})
 	Route.resource('modules', 'ModulesController').apiOnly().only(['index', 'show', 'update']).middleware({})
+	Route.resource('forums', 'ForumsController').apiOnly().middleware({})
 	Route.get('/authentication/user/me', 'AuthController.user').middleware('auth')
 
 	Route.post('/authentication/api/login', 'AuthController.loginApi')
