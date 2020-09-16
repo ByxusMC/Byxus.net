@@ -6,7 +6,9 @@ import UpdateValidator from 'App/Validators/roles/UpdateValidator'
 
 export default class RolesController {
 	public async index() {
-		const roles = await Role.query().preload('label')
+		const roles = await Role.query().preload('label', (label) => {
+			label.select(['code'])
+		})
 		return { roles }
 	}
 

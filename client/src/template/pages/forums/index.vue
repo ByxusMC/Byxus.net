@@ -25,24 +25,18 @@
 									<button type="button" class="btn btn-primary btn-sm">
 										<i class="icon-plus text-white"></i>
 									</button>
-									<button type="button" class="btn btn-danger btn-sm" v-b-modal.delete-confirm>
+									<button type="button" class="btn btn-danger btn-sm" @click="$bvModal.show('delete-confirm-' + key)">
 										<i class="icon-ban text-white"></i>
 									</button>
 								</div>
 							</div>
 						</div>
-						<b-modal class="delete-confirm" id="delete-confirm">
+						<b-modal class="delete-confirm" :id="'delete-confirm-' + key">
 							<template v-slot:modal-title>Confirmation de suppression</template>
-							<div
-								class="my-2"
-							>Vous êtes sur le point de supprimer un forum, êtes-vous sûr de vouloir le faire ?</div>
+							<div class="my-2">Vous êtes sur le point de supprimer un forum, êtes-vous sûr de vouloir le faire ?</div>
 							<template v-slot:modal-footer>
 								<div class="float-right">
-									<b-button
-										variant="primary"
-										size="sm"
-										@click.prevent="handleDelete(forum.id, key)"
-									>Oui je le veux</b-button>
+									<b-button variant="primary" size="sm" @click.prevent="handleDelete(forum.id, key), $bvModal.hide('delete-confirm-' + key)">Oui je le veux</b-button>
 								</div>
 							</template>
 						</b-modal>
@@ -52,10 +46,7 @@
 								<div class="forum-category">
 									<div class="label">
 										<i class="icon-comment-dots"></i>
-										<nuxt-link
-											:to="`/forums/${$t(forum.label.code)}/${$t(category.label.code)}/`"
-											class="h6 no-styling"
-										>{{ $t(category.label.code)}}</nuxt-link>
+										<nuxt-link :to="`/forums/${$t(forum.label.code)}/${$t(category.label.code)}/`" class="h6 no-styling">{{ $t(category.label.code) }}</nuxt-link>
 									</div>
 									<div class="informations">
 										<div class="category-item">
@@ -82,11 +73,7 @@
 								Aucun forum n'a été trouvé 😥
 								<span v-if="hasRole('update')">
 									Créez votre premier forum en cliquant
-									<span
-										class="font-weight-bold text-secondary"
-										style="cursor: pointer;"
-										v-b-modal.new-forum
-									>ici</span>
+									<span class="font-weight-bold text-secondary" style="cursor: pointer" v-b-modal.new-forum>ici</span>
 								</span>
 							</h2>
 						</div>
@@ -125,6 +112,18 @@
 						</div>
 					</div>
 				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<div class="form-group label">
+							<label for="slug-fr">Affichage dans l'URL (FR)</label>
+							<v-select :options="roles.roles" label="label.power" v-model="form.roles" :reduce="(role) => role.id" :getOptionLabel="({ label }) => $t(label.code)" multiple>
+								<template #option="{ label }">
+									{{ $t(label.code) }}
+								</template>
+							</v-select>
+						</div>
+					</div>
+				</div>
 			</div>
 			<template v-slot:modal-footer>
 				<div class="w-100">
@@ -137,6 +136,8 @@
 
 <script>
 import { RolesGuard, I18N } from '~/utils'
+import 'vue-select/dist/vue-select.css'
+import VSelect from 'vue-select'
 
 export default {
 	layout: 'master',
@@ -148,6 +149,7 @@ export default {
 				destroy: [],
 			},
 			forums: [],
+			roles: [],
 			form: {
 				translations: {
 					slug: {
@@ -174,7 +176,8 @@ export default {
 				const { data: slug } = await this.$axios.post('/translations', this.form.translations.slug)
 				this.updateTranslations(slug)
 
-				const { data } = await this.$axios.post('/forums', { labelId: label.translation.id, slugId: slug.translation.id })
+				const { data } = await this.$axios.post('/forums', { labelId: label.translation.id, slugId: slug.translation.id, roles: this.form.roles })
+				console.log(this.form.roles, data.forum)
 				this.getForums()
 
 				this.$toast.success(`Le forum a été mis à jour`)
@@ -202,11 +205,18 @@ export default {
 		},
 	},
 	async mounted() {
-		const { data } = await this.$axios.get('/modules/2')
+		const { data: m } = await this.$axios.get('/modules/2')
+		const { data: r } = await this.$axios.get('/roles')
 		this.getForums()
-		this.module = data.module
+		this.module = m.module
+		this.roles = r
+
+		console.log('roles', this.roles)
+
 		this.loading = false
 	},
+
+	components: { 'v-select': VSelect },
 }
 </script>
 

@@ -25,7 +25,9 @@ export default class ForumsController {
 				})
 			})
 			.preload('roles', (role) => {
-				role.preload('label')
+				role.preload('label', (label) => {
+					label.select(['code'])
+				})
 			})
 
 		forums.forEach((forum) => {
@@ -58,9 +60,11 @@ export default class ForumsController {
 	public async store({ request }: HttpContextContract) {
 		const data = await request.validate(StoreValidator)
 		const roles = request.input('roles')
-		const forum = await Forum.create(data)
 
-		// await forum.related('roles').sync(roles)
+		const forum = await Forum.create(data)
+		if (roles) {
+			await forum.related('roles').sync(roles)
+		}
 
 		return { forum }
 	}
