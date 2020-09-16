@@ -25,16 +25,27 @@
 									<button type="button" class="btn btn-primary btn-sm">
 										<i class="icon-plus text-white"></i>
 									</button>
-									<button
-										type="button"
-										class="btn btn-danger btn-sm"
-										@click.prevent="handleDelete(forum.id, key)"
-									>
+									<button type="button" class="btn btn-danger btn-sm" v-b-modal.delete-confirm>
 										<i class="icon-ban text-white"></i>
 									</button>
 								</div>
 							</div>
 						</div>
+						<b-modal class="delete-confirm" id="delete-confirm">
+							<template v-slot:modal-title>Confirmation de suppression</template>
+							<div
+								class="my-2"
+							>Vous êtes sur le point de supprimer un forum, êtes-vous sûr de vouloir le faire ?</div>
+							<template v-slot:modal-footer>
+								<div class="float-right">
+									<b-button
+										variant="primary"
+										size="sm"
+										@click.prevent="handleDelete(forum.id, key)"
+									>Oui je le veux</b-button>
+								</div>
+							</template>
+						</b-modal>
 						<hr />
 						<div class="container">
 							<div v-for="(category, index) in forum.categories" :key="index">
