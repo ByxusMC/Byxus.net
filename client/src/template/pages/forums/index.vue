@@ -232,15 +232,15 @@ export default {
 			}
 		},
 		async handleEdit(id, key) {
-			const { label_id, slug_id, roles }, forum = this.forums[key]
+			const { label_id, slug_id, roles } = this.forums[key]
 			let array = []
 
 			try {
 				roles.forEach((role) => (array = [...array, role.id]))
-				await this.$axios.put('/translations/' + label_id, forum.label)
-				await this.$axios.put('/translations/' + slug_id, forum.slug)
+				await this.$axios.put('/translations/' + label_id, this.forums[key].label)
+				await this.$axios.put('/translations/' + slug_id, this.forums[key].slug)
 
-				const { data } = await this.$axios.put('/forums/' + id, { ...forum, roles: array })
+				const { data } = await this.$axios.put('/forums/' + id, { ...this.forums[key], roles: array })
 				this.$toast.success(data.message)
 				this.$bvModal.hide('edit-forum-' + key)
 			} catch (error) {
@@ -265,7 +265,7 @@ export default {
 		},
 		async getModule() {
 			const { data } = await this.$axios.get('/modules/2')
-			this.module = data
+			this.module = data.module
 		},
 		async getRoles() {
 			const { data } = await this.$axios.get('/roles')
@@ -273,8 +273,6 @@ export default {
 		},
 	},
 	async mounted() {
-		const { data: m } = await this.$axios.get('/modules/2')
-		const { data: r } = await this.$axios.get('/roles')
 		this.getForums()
 		this.getModule()
 		this.getRoles()
