@@ -84,6 +84,7 @@ export default class ForumsController {
 
 	public async destroy({ params }: HttpContextContract) {
 		const forum = await Forum.findOrFail(params.id)
+		forum.related('roles').detach()
 
 		forum.delete()
 		return { message: 'Le forum a bien été supprimé' }
