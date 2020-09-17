@@ -6,19 +6,26 @@
 					<i class="icon-comments-alt"></i>
 					{{ $t(forum.label.code) }}
 				</h2>
-				<div v-if="canUpdate" class="actions">
+				<div v-if="canCreate || canUpdate || canDelete" class="actions">
 					<div class="btn-group" role="group" aria-label="Basic example">
 						<button
+							v-if="canUpdate"
 							type="button"
 							class="btn btn-info btn-sm"
 							@click="$bvModal.show('edit-forum-' + forum.id)"
 						>
 							<i class="icon-edit text-white"></i>
 						</button>
-						<button type="button" class="btn btn-primary btn-sm">
+						<button
+							v-if="canUpdate"
+							type="button"
+							class="btn btn-primary btn-sm"
+							@click="$bvModal.show('create-categories-' + forum.id)"
+						>
 							<i class="icon-plus text-white"></i>
 						</button>
 						<button
+							v-if="canDelete"
 							type="button"
 							class="btn btn-danger btn-sm"
 							@click="$bvModal.show('delete-confirm-' + forum.id)"
@@ -49,10 +56,15 @@
 				</template>
 			</b-modal>
 			<ForumModalUpdate :forum="forum" :roles="roles" @onUpdate="handleUpdateForum" />
+			<CategoriesModalCreate
+				:forum="forum"
+				:roles="roles"
+				@onSubmit="handleCreateCategorie"
+			/>
 			<hr />
 			<div class="categories-container">
 				<div v-for="(category, index) in forum.categories" :key="index">
-					<CategoriesContainer :category="category" />
+					<CategoriesContainer :forum="forum" :category="category" />
 					<hr />
 				</div>
 			</div>
@@ -63,6 +75,7 @@
 <script>
 import CategoriesContainerVue from './CategoriesContainer'
 import ForumModalUpdateVue from './ForumModalUpdate'
+import CategoriesModalCreateVue from './CategoriesModalCreate'
 import { RolesGuard, I18N } from '~/utils'
 
 export default {
@@ -77,10 +90,14 @@ export default {
 		handleDeleteForum(id, index) {
 			this.$emit('onDelete', id, index)
 		},
+		handleCreateCategorie(forumId, form) {
+			this.$emit('onCreateCategorie', forumId, form)
+		},
 	},
 	components: {
 		CategoriesContainer: CategoriesContainerVue,
 		ForumModalUpdate: ForumModalUpdateVue,
+		CategoriesModalCreate: CategoriesModalCreateVue,
 	},
 }
 </script>

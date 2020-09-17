@@ -4,7 +4,7 @@
 			<div class="label">
 				<i class="icon-comment-dots"></i>
 				<nuxt-link
-					:to="`/forums/${$t(category.label.code)}/${$t(category.label.code)}/`"
+					:to="`/forums/${$t(forum.slug.code)}/${$t(category.slug.code)}/`"
 					class="h6 no-styling"
 					>{{ $t(category.label.code) }}</nuxt-link
 				>
@@ -26,7 +26,7 @@
 <script>
 export default {
 	name: 'CategoriesContainer',
-	props: ['category'],
+	props: ['forum', 'category'],
 }
 </script>
 

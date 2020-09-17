@@ -1,11 +1,11 @@
 <template>
-	<b-modal class="new-forum" id="new-forum">
-		<template v-slot:modal-title>Nouveau forum</template>
+	<b-modal class="new-forum" :id="'create-categories-' + forum.id">
+		<template v-slot:modal-title>Nouvelle catégorie</template>
 		<div class="my-2">
 			<div class="row">
 				<div class="col-md-6">
 					<div class="form-group label">
-						<label for="label-fr">Nom du forum (FR)</label>
+						<label for="label-fr">Nom de la catégorie (FR)</label>
 						<input
 							type="text"
 							name="label-fr"
@@ -16,7 +16,7 @@
 				</div>
 				<div class="col-md-6">
 					<div class="form-group label">
-						<label for="label-en">Nom du forum (EN)</label>
+						<label for="label-en">Nom de la catégorie (EN)</label>
 						<input
 							type="text"
 							name="label-en"
@@ -87,11 +87,26 @@ import 'vue-select/dist/vue-select.css'
 import VSelect from 'vue-select'
 
 export default {
-	name: 'ForumModalCreate',
-	props: ['form', 'roles'],
+	name: 'CategoriesModalCreate',
+	props: ['forum', 'roles'],
+	data() {
+		return {
+			form: {
+				label: {
+					fr: '',
+					en: '',
+				},
+				slug: {
+					fr: '',
+					en: '',
+				},
+				roles: [],
+			},
+		}
+	},
 	methods: {
 		handleSubmit() {
-			this.$emit('onSubmit')
+			this.$emit('onSubmit', this.forum.id, this.form)
 		},
 	},
 	components: { 'v-select': VSelect },

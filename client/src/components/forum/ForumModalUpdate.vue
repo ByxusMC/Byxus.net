@@ -53,7 +53,10 @@
 			<div class="row">
 				<div class="col-md-12">
 					<div class="form-group label">
-						<label for="slug-fr">Affichage dans l'URL (FR)</label>
+						<label for="slug-fr"
+							>Roles pouvant interagir avec le forum
+							<span class="font-weight-bold">{{ $t(forum.label.code) }}</span></label
+						>
 						<v-select
 							:options="roles"
 							label="label.power"
@@ -84,6 +87,7 @@
 <script>
 import 'vue-select/dist/vue-select.css'
 import VSelect from 'vue-select'
+import { RolesGuard } from '~/utils'
 
 export default {
 	name: 'ForumModalUpdate',
@@ -91,7 +95,6 @@ export default {
 	methods: {
 		handleSubmit() {
 			this.$emit('onUpdate', this.forum)
-			console.log(1)
 		},
 	},
 	components: { 'v-select': VSelect },

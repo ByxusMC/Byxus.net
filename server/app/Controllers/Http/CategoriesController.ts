@@ -1,8 +1,9 @@
 // import Application from '@ioc:Adonis/Core/Application'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Category from 'App/Models/Category'
-import StoreValidator from 'App/Validators/categories/StoreValidator'
 import UpdateValidator from 'App/Validators/categories/UpdateValidator'
+import Translation from 'App/Models/Translation'
+import Forum from 'App/Models/Forum'
 
 export default class CategoriesController {
 	public async index() {
@@ -11,19 +12,21 @@ export default class CategoriesController {
 	}
 
 	public async show({ params }: HttpContextContract) {
-		const categorie = await Category.query()
-			.where('id', params.id)
-			.preload('label')
-			.preload('posts')
-			.firstOrFail()
+		const categorie = await Category.query().where('id', params.id).preload('label').preload('posts').firstOrFail()
 		return { categorie }
 	}
 
 	public async store({ request }: HttpContextContract) {
-		const data = await request.validate(StoreValidator)
-		const categorie = await Category.create(data)
+		const { roles, label, slug, forumId } = await request.only(['roles', 'label', 'slug', 'forumId'])
+		const categorie = await new Category()
+		const forum = await Forum.findOrFail(+forumId)
 
-		return { categorie }
+		await categorie.related('forum').associate(forum)
+		await categorie.related('label').associate(await Translation.findOrFail(label))
+		await categorie.related('slug').associate(await Translation.findOrFail(slug))
+		await categorie.related('roles').sync(roles)
+
+		return categorie
 	}
 
 	public async update({ request, params }: HttpContextContract) {

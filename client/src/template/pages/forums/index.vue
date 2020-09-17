@@ -23,7 +23,8 @@
 						:canDelete="hasRole('destroy')"
 						@onUpdate="handleEdit"
 						@onDelete="handleDelete"
-						:roles="roles"
+						@onCreateCategorie="handleCreateCategorie"
+						:roles="filteredRoles"
 						:key="key"
 						:index="key"
 					/>
@@ -35,7 +36,7 @@
 				<ForumNotFound :canCreate="hasRole('create')" modalId="action-create-forum" />
 			</div>
 		</template>
-		<ForumModalCreate :form="form" :roles="roles" @onSubmit="handleCreate" />
+		<ForumModalCreate :form="form" :roles="filteredRoles" @onSubmit="handleCreate" />
 	</div>
 </template>
 
@@ -57,6 +58,7 @@ export default {
 			},
 			forums: [],
 			roles: [],
+			filteredRoles: [],
 			form: {
 				slug: {
 					fr: '',
@@ -89,6 +91,26 @@ export default {
 				this.$toast.success(`Le forum a été créé`)
 				this.$bvModal.hide('new-forum')
 				this.form = { slug: { fr: '', en: '' }, label: { fr: '', en: '' }, roles: [] }
+			} catch (error) {
+				console.log(error.response)
+				error.response.data.errors.forEach((error) => {
+					this.$toast.error(error.message)
+				})
+			}
+		},
+		async handleCreateCategorie(forumId, form) {
+			try {
+				const { data: label } = await this.$axios.post('/translations', form.label)
+				const { data: slug } = await this.$axios.post('/translations', form.slug)
+
+				const { data } = await this.$axios.post('/categories', {
+					...form,
+					forumId,
+					label: label.id,
+					slug: slug.id,
+				})
+				this.$toast.success(`La catégorie a été créé`)
+				this.$bvModal.hide('create-categories-' + forumId)
 			} catch (error) {
 				console.log(error.response)
 				error.response.data.errors.forEach((error) => {
@@ -134,6 +156,15 @@ export default {
 	},
 	async mounted() {
 		this.loading = false
+		let array = []
+
+		const heightRole = RolesGuard.heightRole(this.$auth.user.roles)
+		this.roles.forEach((role) => {
+			if (role.power <= heightRole.power) {
+				array = [...array, role]
+			}
+		})
+		this.filteredRoles = array
 	},
 
 	async asyncData({ isDev, route, store, env, params, query, req, res, redirect, error }) {
@@ -141,6 +172,7 @@ export default {
 		const { data: forums } = await axios.get('http://localhost:3333/api/forums', axiosConfig)
 		const { data: module } = await axios.get('http://localhost:3333/api/modules/2', axiosConfig)
 		const { data: roles } = await axios.get('http://localhost:3333/api/roles', axiosConfig)
+
 		return {
 			forums,
 			module: module.module,

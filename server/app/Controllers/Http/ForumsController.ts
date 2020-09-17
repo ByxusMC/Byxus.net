@@ -11,6 +11,7 @@ export default class ForumsController {
 			.preload('slug', (slug) => slug.select(['id', 'code', 'fr', 'en']))
 			.preload('categories', (categorie) => {
 				categorie.preload('label', (label) => label.select(['id', 'code', 'fr', 'en']))
+				categorie.preload('slug', (slug) => slug.select(['id', 'code', 'fr', 'en']))
 				categorie.withCount('posts')
 				categorie.limit(5)
 				categorie.preload('posts', (post) => {

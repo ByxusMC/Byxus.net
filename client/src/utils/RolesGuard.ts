@@ -24,6 +24,17 @@ class RolesGuards {
 		})
 		return hasRole
 	}
+
+	public heightRole(roles: Array<{ id: number; power: number }>) {
+		let maxPower: number = 0
+		roles.forEach((role) => {
+			if (role.power >= maxPower) maxPower = role.power
+		})
+
+		return roles.filter((role) => {
+			return role.power === maxPower
+		})[0]
+	}
 }
 
 export default new RolesGuards()
