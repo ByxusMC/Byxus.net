@@ -143,7 +143,7 @@ export default {
 		u.user.roles.forEach((role) => array.push(role.id))
 
 		this.user = u.user
-		this.roles = r.roles
+		this.roles = r
 		this.currentRoles = array
 		this.module = m.module
 		this.loading = false
