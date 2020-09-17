@@ -4,7 +4,7 @@
 			<div class="label">
 				<i class="icon-comment-dots"></i>
 				<nuxt-link
-					:to="`/forums/${$t(forum.slug.code)}/${$t(category.slug.code)}/`"
+					:to="`/forums/${$t(forum.slug.code)}/${$t(category.slug.code)}/${category.id}`"
 					class="h6 no-styling"
 					>{{ $t(category.label.code) }}</nuxt-link
 				>
