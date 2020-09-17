@@ -1,5 +1,5 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { schema, rules } from '@ioc:Adonis/Core/Validator'
+import { schema } from '@ioc:Adonis/Core/Validator'
 
 export default class StoreValidator {
 	constructor(private ctx: HttpContextContract) {}
@@ -23,14 +23,7 @@ export default class StoreValidator {
 	 *     ])
 	 *    ```
 	 */
-	public schema = schema.create({
-		labelId: schema.number([
-			rules.exists({ table: 'translations', column: 'id' })
-		]),
-		slugId: schema.number([
-			rules.exists({ table: 'translations', column: 'id' })
-		])
-	})
+	public schema = schema.create({})
 
 	/**
 	 * The `schema` first gets compiled to a reusable function and then that compiled

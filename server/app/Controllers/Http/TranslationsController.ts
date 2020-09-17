@@ -8,12 +8,12 @@ import randomstring from 'randomstring'
 export default class TranslatinsController {
 	public async index() {
 		const translations = await Translation.all()
-		return { translations }
+		return translations
 	}
 
 	public async show({ params }: HttpContextContract) {
 		const translation = await Translation.findOrFail(params.id)
-		return { translation }
+		return translation
 	}
 
 	public async store({ request }: HttpContextContract) {
@@ -21,7 +21,7 @@ export default class TranslatinsController {
 		const code = randomstring.generate()
 		const translation = await Translation.create({ ...data, code })
 
-		return { translation }
+		return translation
 	}
 
 	public async update({ request, params }: HttpContextContract) {

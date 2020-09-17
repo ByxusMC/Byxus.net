@@ -11,11 +11,13 @@ export default class Forums extends BaseSchema {
 				.unsigned()
 				.references('id')
 				.inTable('translations')
+				.onDelete('CASCADE')
 			table
 				.integer('slug_id')
 				.unsigned()
 				.references('id')
 				.inTable('translations')
+				.onDelete('CASCADE')
 			table.timestamps(true, true)
 		})
 	}

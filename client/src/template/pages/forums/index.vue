@@ -19,7 +19,7 @@
 							</h2>
 							<div v-if="hasRole('update')" class="actions">
 								<div class="btn-group" role="group" aria-label="Basic example">
-									<button type="button" class="btn btn-info btn-sm">
+									<button type="button" class="btn btn-info btn-sm" @click="$bvModal.show('edit-forum-' + key)">
 										<i class="icon-edit text-white"></i>
 									</button>
 									<button type="button" class="btn btn-primary btn-sm">
@@ -37,6 +37,54 @@
 							<template v-slot:modal-footer>
 								<div class="float-right">
 									<b-button variant="primary" size="sm" @click.prevent="handleDelete(forum.id, key), $bvModal.hide('delete-confirm-' + key)">Oui je le veux</b-button>
+								</div>
+							</template>
+						</b-modal>
+						<b-modal class="edit-forum" :id="'edit-forum-' + key">
+							<template v-slot:modal-title>Edition du forum</template>
+							<div class="my-2">
+								<div class="row">
+									<div class="col-md-6">
+										<div class="form-group label">
+											<label for="label-fr">Nom du forum (FR)</label>
+											<input type="text" name="label-fr" class="form-control" v-model="forums[key].label.fr" />
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="form-group label">
+											<label for="label-en">Nom du forum (EN)</label>
+											<input type="text" name="label-en" class="form-control" v-model="forums[key].label.en" />
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-6">
+										<div class="form-group label">
+											<label for="slug-fr">Affichage dans l'URL (FR)</label>
+											<input type="text" name="slug-fr" class="form-control" v-model="forums[key].slug.fr" />
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="form-group label">
+											<label for="slug-en">Affichage dans l'URL (EN)</label>
+											<input type="text" name="slug-en" class="form-control" v-model="forums[key].slug.en" />
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<div class="form-group label">
+											<label for="slug-fr">Affichage dans l'URL (FR)</label>
+											<v-select :options="roles" label="label.power" v-model="forums[key].roles" :getOptionLabel="({ label }) => $t(label.code)" multiple>
+												<template #option="{ label }">{{ $t(label.code) }}</template>
+											</v-select>
+										</div>
+									</div>
+								</div>
+							</div>
+							<template v-slot:modal-footer>
+								<div class="w-100">
+									<b-button variant="primary" size="sm" class="float-right" @click.prevent="handleEdit(forum.id, key)">Valider</b-button>
 								</div>
 							</template>
 						</b-modal>
@@ -88,13 +136,13 @@
 					<div class="col-md-6">
 						<div class="form-group label">
 							<label for="label-fr">Nom du forum (FR)</label>
-							<input type="text" name="label-fr" class="form-control" v-model="form.translations.label.fr" />
+							<input type="text" name="label-fr" class="form-control" v-model="form.label.fr" />
 						</div>
 					</div>
 					<div class="col-md-6">
 						<div class="form-group label">
 							<label for="label-en">Nom du forum (EN)</label>
-							<input type="text" name="label-en" class="form-control" v-model="form.translations.label.en" />
+							<input type="text" name="label-en" class="form-control" v-model="form.label.en" />
 						</div>
 					</div>
 				</div>
@@ -102,13 +150,13 @@
 					<div class="col-md-6">
 						<div class="form-group label">
 							<label for="slug-fr">Affichage dans l'URL (FR)</label>
-							<input type="text" name="slug-fr" class="form-control" v-model="form.translations.slug.fr" />
+							<input type="text" name="slug-fr" class="form-control" v-model="form.slug.fr" />
 						</div>
 					</div>
 					<div class="col-md-6">
 						<div class="form-group label">
 							<label for="slug-en">Affichage dans l'URL (EN)</label>
-							<input type="text" name="slug-en" class="form-control" v-model="form.translations.slug.en" />
+							<input type="text" name="slug-en" class="form-control" v-model="form.slug.en" />
 						</div>
 					</div>
 				</div>
@@ -116,10 +164,8 @@
 					<div class="col-md-12">
 						<div class="form-group label">
 							<label for="slug-fr">Affichage dans l'URL (FR)</label>
-							<v-select :options="roles.roles" label="label.power" v-model="form.roles" :reduce="(role) => role.id" :getOptionLabel="({ label }) => $t(label.code)" multiple>
-								<template #option="{ label }">
-									{{ $t(label.code) }}
-								</template>
+							<v-select :options="roles" label="label.power" v-model="form.roles" :reduce="(role) => role.id" :getOptionLabel="({ label }) => $t(label.code)" multiple>
+								<template #option="{ label }">{{ $t(label.code) }}</template>
 							</v-select>
 						</div>
 					</div>
@@ -127,7 +173,7 @@
 			</div>
 			<template v-slot:modal-footer>
 				<div class="w-100">
-					<b-button variant="primary" size="sm" class="float-right" @click.prevent="handleSubmit">Valider</b-button>
+					<b-button variant="primary" size="sm" class="float-right" @click.prevent="handleCreate">Valider</b-button>
 				</div>
 			</template>
 		</b-modal>
@@ -138,6 +184,7 @@
 import { RolesGuard, I18N } from '~/utils'
 import 'vue-select/dist/vue-select.css'
 import VSelect from 'vue-select'
+import { log } from 'util'
 
 export default {
 	layout: 'master',
@@ -151,15 +198,13 @@ export default {
 			forums: [],
 			roles: [],
 			form: {
-				translations: {
-					slug: {
-						fr: '',
-						en: '',
-					},
-					label: {
-						fr: '',
-						en: '',
-					},
+				slug: {
+					fr: '',
+					en: '',
+				},
+				label: {
+					fr: '',
+					en: '',
 				},
 			},
 		}
@@ -168,25 +213,38 @@ export default {
 		hasRole(action) {
 			return RolesGuard.firewall(this.$auth.user, this.module, action)
 		},
-		async handleSubmit() {
+		async handleCreate() {
 			try {
-				let { data: label } = await this.$axios.post('/translations', this.form.translations.label)
-				this.updateTranslations(label)
+				const { data: label } = await this.$axios.post('/translations', this.form.label)
+				const { data: slug } = await this.$axios.post('/translations', this.form.slug)
+				const { data } = await this.$axios.post('/forums', { ...this.form, label: label.id, slug: slug.id })
 
-				const { data: slug } = await this.$axios.post('/translations', this.form.translations.slug)
-				this.updateTranslations(slug)
-
-				const { data } = await this.$axios.post('/forums', { labelId: label.translation.id, slugId: slug.translation.id, roles: this.form.roles })
-				console.log(this.form.roles, data.forum)
+				this.updateTranslations([label, slug])
 				this.getForums()
 
-				this.$toast.success(`Le forum a été mis à jour`)
+				this.$toast.success(`Le forum a été créé`)
 				this.$bvModal.hide('new-forum')
-				this.form.translations = { slug: { fr: '', en: '' }, label: { fr: '', en: '' } }
+				this.form = { slug: { fr: '', en: '' }, label: { fr: '', en: '' }, roles: [] }
 			} catch (error) {
 				error.response.data.errors.forEach((error) => {
 					this.$toast.error(error.message)
 				})
+			}
+		},
+		async handleEdit(id, key) {
+			const { label_id, slug_id, roles }, forum = this.forums[key]
+			let array = []
+
+			try {
+				roles.forEach((role) => (array = [...array, role.id]))
+				await this.$axios.put('/translations/' + label_id, forum.label)
+				await this.$axios.put('/translations/' + slug_id, forum.slug)
+
+				const { data } = await this.$axios.put('/forums/' + id, { ...forum, roles: array })
+				this.$toast.success(data.message)
+				this.$bvModal.hide('edit-forum-' + key)
+			} catch (error) {
+				error.response.data.errors.forEach((error) => this.$toast.error(error.message))
 			}
 		},
 		async handleDelete(id, key) {
@@ -194,24 +252,32 @@ export default {
 			this.forums.splice(key, 1)
 			this.$toast.success(data.message)
 		},
-		updateTranslations(item) {
-			const { code, fr, en } = item.translation
-			I18N.upateTranslations(this.$i18n, 'fr', [code], fr)
-			I18N.upateTranslations(this.$i18n, 'en', [code], en)
+		updateTranslations(items) {
+			items.forEach((item) => {
+				const { code, fr, en } = item
+				I18N.upateTranslations(this.$i18n, 'fr', [code], fr)
+				I18N.upateTranslations(this.$i18n, 'en', [code], en)
+			})
 		},
 		async getForums() {
-			const { data: f } = await this.$axios.get('/forums')
-			this.forums = f.forums
+			const { data } = await this.$axios.get('/forums')
+			this.forums = data
+		},
+		async getModule() {
+			const { data } = await this.$axios.get('/modules/2')
+			this.module = data
+		},
+		async getRoles() {
+			const { data } = await this.$axios.get('/roles')
+			this.roles = data
 		},
 	},
 	async mounted() {
 		const { data: m } = await this.$axios.get('/modules/2')
 		const { data: r } = await this.$axios.get('/roles')
 		this.getForums()
-		this.module = m.module
-		this.roles = r
-
-		console.log('roles', this.roles)
+		this.getModule()
+		this.getRoles()
 
 		this.loading = false
 	},

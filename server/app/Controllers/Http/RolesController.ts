@@ -6,23 +6,23 @@ import UpdateValidator from 'App/Validators/roles/UpdateValidator'
 
 export default class RolesController {
 	public async index() {
-		const roles = await Role.query().preload('label', (label) => {
+		return await Role.query().preload('label', (label) => {
 			label.select(['code'])
 		})
-		return { roles }
 	}
 
 	public async show({ params }: HttpContextContract) {
-		const role = await Role.findOrFail(params.id)
-		await role.preload('label')
-		return { role }
+		return await Role.query()
+			.where('id', params.id)
+			.preload('label')
+			.firstOrFail()
 	}
 
 	public async store({ request }: HttpContextContract) {
 		const data = await request.validate(StoreValidator)
 		const role = await Role.create(data)
 
-		return { role }
+		return role
 	}
 
 	public async update({ request, params }: HttpContextContract) {
@@ -36,8 +36,8 @@ export default class RolesController {
 
 	public async destroy({ params }: HttpContextContract) {
 		const role = await Role.findOrFail(params.id)
+		await role.delete()
 
-		role.delete()
 		return { message: 'Le grade a bien été supprimé' }
 	}
 }
