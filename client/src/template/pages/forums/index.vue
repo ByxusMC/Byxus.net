@@ -44,6 +44,7 @@ import ForumContainerVue from '~/components/forum/ForumContainer'
 import ForumNotFoundVue from '~/components/forum/ForumNotFound'
 import ForumModalCreateVue from '~/components/forum/ForumModalCreate'
 import { RolesGuard, I18N } from '~/utils'
+import axios from 'axios'
 
 export default {
 	layout: 'master',
@@ -96,13 +97,11 @@ export default {
 			}
 		},
 		async handleEdit(forum) {
-			console.log(3)
-
 			const { id, label_id, slug_id, roles } = forum
 			let array = []
+			roles.forEach((role) => (array = [...array, role.id]))
 
 			try {
-				roles.forEach((role) => (array = [...array, role.id]))
 				await this.$axios.put('/translations/' + label_id, forum.label)
 				await this.$axios.put('/translations/' + slug_id, forum.slug)
 
@@ -132,21 +131,21 @@ export default {
 			const { data } = await this.$axios.get('/forums')
 			this.forums = data
 		},
-		async getModule() {
-			const { data } = await this.$axios.get('/modules/2')
-			this.module = data.module
-		},
-		async getRoles() {
-			const { data } = await this.$axios.get('/roles')
-			this.roles = data
-		},
 	},
 	async mounted() {
-		this.getForums()
-		this.getModule()
-		this.getRoles()
-
 		this.loading = false
+	},
+
+	async asyncData({ isDev, route, store, env, params, query, req, res, redirect, error }) {
+		const axiosConfig = { withCredentials: true }
+		const { data: forums } = await axios.get('http://localhost:3333/api/forums', axiosConfig)
+		const { data: module } = await axios.get('http://localhost:3333/api/modules/2', axiosConfig)
+		const { data: roles } = await axios.get('http://localhost:3333/api/roles', axiosConfig)
+		return {
+			forums,
+			module: module.module,
+			roles,
+		}
 	},
 
 	components: {
@@ -158,47 +157,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~public/scss/modules/variables.scss';
-
 .forum-section {
 	padding: 2rem 0;
 	.forum-card {
 		margin: 2rem 0;
-		.forum-category {
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-			.label {
-				a {
-					margin-bottom: 0;
-					color: $primary-color;
-					text-decoration: none;
-					&:hover {
-						color: $secondary-color;
-					}
-				}
-			}
-			.informations {
-				display: flex;
-
-				.category-item {
-					display: flex;
-					flex-direction: column;
-					justify-content: center;
-					margin: 0 1rem;
-					.header-information {
-						font-weight: 700;
-						color: $secondary-color;
-					}
-					p {
-						font-weight: 500;
-						margin: 0;
-						text-align: center;
-						color: $primary-color;
-					}
-				}
-			}
-		}
 	}
 }
 </style>

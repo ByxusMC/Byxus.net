@@ -50,7 +50,12 @@
 			</b-modal>
 			<ForumModalUpdate :forum="forum" :roles="roles" @onUpdate="handleUpdateForum" />
 			<hr />
-			<CategoriesContainer />
+			<div class="categories-container">
+				<div v-for="(category, index) in forum.categories" :key="index">
+					<CategoriesContainer :category="category" />
+					<hr />
+				</div>
+			</div>
 		</div>
 	</div>
 </template>
