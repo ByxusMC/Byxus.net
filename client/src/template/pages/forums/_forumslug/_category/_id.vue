@@ -1,8 +1,8 @@
 <template>
 	<div class="forum-section">
-		<div class="container">
-			<div class="d-flex justify-content-between">
-				<h1>{{ $t(category.label.code) }}</h1>
+		<ForumBanner />
+		<div class="container py-3">
+			<div class="d-flex justify-content-end">
 				<div class="actions">
 					<nuxt-link
 						:to="`/forums/${$t(category.forum.slug.code)}/${$t(
@@ -68,12 +68,14 @@
 </template>
 
 <script>
+import ForumBannerVue from '~/components/forum/ForumBanner'
+import ForumLayoutVue from '~/template/layouts/forum'
 import CategoriesModalUpdateVue from '~/components/forum/CategoriesModalUpdate'
 import { RolesGuard, I18N } from '~/utils'
 import axios from 'axios'
 
 export default {
-	layout: 'master',
+	layout: 'forum',
 	data() {
 		return {
 			module: {
@@ -150,6 +152,7 @@ export default {
 	},
 
 	components: {
+		ForumBanner: ForumBannerVue,
 		CategoriesModalUpdate: CategoriesModalUpdateVue,
 	},
 
@@ -175,7 +178,6 @@ export default {
 @import '~public/scss/modules/variables.scss';
 
 .forum-section {
-	padding: 2rem 0;
 	.forum-card {
 		margin: 2rem 0;
 		.forum-category {

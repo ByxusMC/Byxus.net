@@ -3,7 +3,10 @@
 		<div class="container">
 			<div class="d-flex justify-content-between">
 				<h1>POST name</h1>
-				<div v-if="hasRole('create') || hasRole('update') || hasRole('destroy')" class="actions">
+				<div
+					v-if="hasRole('create') || hasRole('update') || hasRole('destroy')"
+					class="actions"
+				>
 					<button type="button" class="btn btn-secondary">
 						<i class="icon-plus" style="color: white"></i>
 					</button>
@@ -40,7 +43,7 @@
 import { RolesGuard } from '~/utils'
 
 export default {
-	layout: 'master',
+	layout: 'forum',
 	data() {
 		return {
 			module: {

@@ -1,14 +1,14 @@
 <template>
 	<div class="forum-section">
-		<div class="container">
-			<div class="d-flex justify-content-between">
-				<h1>Forums byxus.fr</h1>
+		<ForumBanner />
+		<div class="container pt-4">
+			<div class="d-flex">
 				<div
 					v-if="hasRole('create') || hasRole('update') || hasRole('destroy')"
 					class="actions"
 				>
 					<button type="button" class="btn btn-secondary" v-b-modal.new-forum>
-						<i class="icon-plus" style="color: white"></i>
+						<i class="icon-plus" style="color: white"></i> Créer un forum
 					</button>
 				</div>
 			</div>
@@ -41,6 +41,7 @@
 </template>
 
 <script>
+import ForumBannerVue from '~/components/forum/ForumBanner'
 import ForumContainerVue from '~/components/forum/ForumContainer'
 import ForumNotFoundVue from '~/components/forum/ForumNotFound'
 import ForumModalCreateVue from '~/components/forum/ForumModalCreate'
@@ -48,7 +49,7 @@ import { RolesGuard, I18N } from '~/utils'
 import axios from 'axios'
 
 export default {
-	layout: 'master',
+	layout: 'forum',
 	data() {
 		return {
 			module: {
@@ -171,6 +172,7 @@ export default {
 			}
 		})
 		this.filteredRoles = array
+		this.$emit('displayName', 'Forums byxus.fr')
 	},
 
 	async asyncData({ isDev, route, store, env, params, query, req, res, redirect, error }) {
@@ -190,13 +192,13 @@ export default {
 		ForumContainer: ForumContainerVue,
 		ForumNotFound: ForumNotFoundVue,
 		ForumModalCreate: ForumModalCreateVue,
+		ForumBanner: ForumBannerVue,
 	},
 }
 </script>
 
 <style lang="scss" scoped>
 .forum-section {
-	padding: 2rem 0;
 	.forum-card {
 		margin: 2rem 0;
 	}
