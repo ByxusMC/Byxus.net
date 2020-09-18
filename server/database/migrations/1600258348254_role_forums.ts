@@ -6,16 +6,8 @@ export default class RoleForums extends BaseSchema {
 	public async up() {
 		this.schema.createTable(this.tableName, (table) => {
 			table.increments('id')
-			table
-				.integer('role_id')
-				.unsigned()
-				.references('id')
-				.inTable('roles')
-			table
-				.integer('forum_id')
-				.unsigned()
-				.references('id')
-				.inTable('forums')
+			table.integer('role_id').unsigned().references('id').inTable('roles')
+			table.integer('forum_id').unsigned().references('id').inTable('forums').onDelete('CASCADE')
 			table.timestamps(true, true)
 		})
 	}

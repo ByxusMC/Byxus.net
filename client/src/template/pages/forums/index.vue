@@ -109,6 +109,9 @@ export default {
 					label: label.id,
 					slug: slug.id,
 				})
+				this.updateTranslations([label, slug])
+				this.getForums()
+
 				this.$toast.success(`La catégorie a été créé`)
 				this.$bvModal.hide('create-categories-' + forumId)
 			} catch (error) {
