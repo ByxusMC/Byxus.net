@@ -5,9 +5,9 @@
 			<div class="d-flex justify-content-end">
 				<div class="actions">
 					<nuxt-link
-						:to="`/forums/${$t(category.forum.slug.code)}/${$t(
-							category.slug.code
-						)}/posts/create`"
+						:to="`/forums/${$t(category.forum.slug.code)}/${$t(category.slug.code)}/${
+							category.id
+						}/post/create`"
 						class="btn btn-primary"
 						>Créer une discusssion</nuxt-link
 					>
