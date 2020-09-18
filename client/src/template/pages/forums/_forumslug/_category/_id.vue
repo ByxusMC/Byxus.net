@@ -38,22 +38,12 @@
 					<div class="container">
 						<template v-if="category.posts.length != 0">
 							<div v-for="(post, key) in category.posts" :key="key">
-								<div class="forum-category">
-									<div class="label">
-										<nuxt-link :to="formatSlug(post)" class="h6 no-styling">
-											<i class="icon-comment-dots"></i>
-											{{ post.label }}
-										</nuxt-link>
-									</div>
-									<div class="informations">
-										<div class="category-item">
-											<span class="header-information">Messages</span>
-											<p>{{ post.comments.length }}</p>
-										</div>
-									</div>
-								</div>
+								<PostContainer :post="post" />
 								<hr />
 							</div>
+						</template>
+						<template v-else>
+							<PostsNotFound :category="category" />
 						</template>
 					</div>
 				</div>
@@ -71,6 +61,8 @@
 import ForumBannerVue from '~/components/forum/ForumBanner'
 import ForumLayoutVue from '~/template/layouts/forum'
 import CategoriesModalUpdateVue from '~/components/forum/CategoriesModalUpdate'
+import PostsContainerVue from '~/components/forum/PostsContainer'
+import PostsNotFoundVue from '~/components/forum/PostsNotFound'
 import { RolesGuard, I18N } from '~/utils'
 import axios from 'axios'
 
@@ -154,6 +146,8 @@ export default {
 	components: {
 		ForumBanner: ForumBannerVue,
 		CategoriesModalUpdate: CategoriesModalUpdateVue,
+		PostsContainer: PostsContainerVue,
+		PostsNotFound: PostsNotFoundVue,
 	},
 
 	async asyncData({ isDev, route, store, env, params, query, req, res, redirect, error }) {

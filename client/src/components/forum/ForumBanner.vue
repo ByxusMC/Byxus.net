@@ -2,6 +2,10 @@
 	<div class="forum-banner">
 		<div class="container">
 			<h1>{{ title }}</h1>
+			<p>
+				Lorem ipsum, dolor sit amet consectetur adipisicing elit. Fugiat illum ipsa nostrum
+				iusto nesciunt. Quo modi itaque odit vel animi.
+			</p>
 		</div>
 	</div>
 </template>
@@ -46,9 +50,10 @@ export default {
 		left: 50%;
 		top: 50%;
 		transform: translate(-50%, -50%);
-		h1 {
-			text-align: center;
+		h1,
+		p {
 			color: white;
+			max-width: 50%;
 		}
 	}
 }
