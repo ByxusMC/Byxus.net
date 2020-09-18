@@ -2,8 +2,11 @@
 	<div class="forum-section">
 		<div class="container">
 			<div class="d-flex justify-content-between">
-				<h1>Forums name :)</h1>
-				<div v-if="hasRole('create') || hasRole('update') || hasRole('destroy')" class="actions">
+				<h1>{{ $t(category.label.code) }}</h1>
+				<div
+					v-if="hasRole('create') || hasRole('update') || hasRole('destroy')"
+					class="actions"
+				>
 					<button type="button" class="btn btn-secondary">
 						<i class="icon-plus" style="color: white"></i>
 					</button>
@@ -12,22 +15,18 @@
 			<div class="forum-card card">
 				<div class="card-body">
 					<div class="container">
-						<div v-for="(y, index) in 15" :key="index">
+						<div v-for="(post, key) in category.posts" :key="key">
 							<div class="forum-category">
 								<div class="label">
-									<nuxt-link to="/forums/forum_slug/category_slug/post_slug/1" class="h6 no-styling">
+									<nuxt-link :to="formatSlug(post)" class="h6 no-styling">
 										<i class="icon-comment-dots"></i>
-										Post 1
+										{{ post.label }}
 									</nuxt-link>
 								</div>
 								<div class="informations">
 									<div class="category-item">
-										<span class="header-information">{{ $t('forums_threads') }}</span>
-										<p>587</p>
-									</div>
-									<div class="category-item">
 										<span class="header-information">Messages</span>
-										<p>587</p>
+										<p>{{ post.comments.length }}</p>
 									</div>
 								</div>
 							</div>
@@ -42,6 +41,7 @@
 
 <script>
 import { RolesGuard } from '~/utils'
+import axios from 'axios'
 
 export default {
 	layout: 'master',
@@ -58,12 +58,39 @@ export default {
 		hasRole(action) {
 			return RolesGuard.firewall(this.$auth.user, this.module, action)
 		},
+		formatSlug(post) {
+			return `/forums/${this.$t(this.category.forum.slug.code)}/${this.$t(
+				this.category.slug.code
+			)}/${post.label.toLowerCase().replace(' ', '-').replace('?', '')}/${post.id}`
+		},
 	},
 	async mounted() {
-		const { data: m } = await this.$axios.get('/modules/2')
-
-		this.module = m.module
 		this.loading = false
+		let array = []
+
+		const heightRole = RolesGuard.heightRole(this.$auth.user.roles)
+		this.roles.forEach((role) => {
+			if (role.power <= heightRole.power) {
+				array = [...array, role]
+			}
+		})
+		this.filteredRoles = array
+	},
+
+	async asyncData({ isDev, route, store, env, params, query, req, res, redirect, error }) {
+		const axiosConfig = { withCredentials: true }
+		const { data: category } = await axios.get(
+			'http://localhost:3333/api/categories/' + params.id,
+			axiosConfig
+		)
+		const { data: module } = await axios.get('http://localhost:3333/api/modules/2', axiosConfig)
+		const { data: roles } = await axios.get('http://localhost:3333/api/roles', axiosConfig)
+
+		return {
+			category,
+			module: module.module,
+			roles,
+		}
 	},
 }
 </script>

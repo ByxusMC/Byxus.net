@@ -7,13 +7,23 @@ import Forum from 'App/Models/Forum'
 
 export default class CategoriesController {
 	public async index() {
-		const categories = await Category.query().preload('label')
-		return { categories }
+		const categories = await Category.query()
+			.preload('label')
+			.preload('slug')
+			.preload('forum', (forum) => forum.preload('slug'))
+			.preload('posts', (post) => post.preload('comments'))
+		return categories
 	}
 
 	public async show({ params }: HttpContextContract) {
-		const categorie = await Category.query().where('id', params.id).preload('label').preload('posts').firstOrFail()
-		return { categorie }
+		const categorie = await Category.query()
+			.where('id', params.id)
+			.preload('label')
+			.preload('slug')
+			.preload('forum', (forum) => forum.preload('slug'))
+			.preload('posts', (post) => post.preload('comments'))
+			.firstOrFail()
+		return categorie
 	}
 
 	public async store({ request }: HttpContextContract) {
