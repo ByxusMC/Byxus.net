@@ -41,6 +41,8 @@
 
 <script>
 import { RolesGuard } from '~/utils'
+import axios from 'axios'
+import AxiosConfig from '../../../../../../../config/Axios'
 
 export default {
 	layout: 'forum',
@@ -63,6 +65,12 @@ export default {
 
 		this.module = m.module
 		this.loading = false
+	},
+
+	async asyncData({ isDev, route, store, env, params, query, req, res, redirect, error }) {
+		const { data } = await axios.get(AxiosConfig.baseURL + '/posts/' + params.id)
+		console.log(data)
+		return { post: data }
 	},
 }
 </script>

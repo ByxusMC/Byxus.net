@@ -38,7 +38,7 @@
 					<div class="container">
 						<template v-if="category.posts.length != 0">
 							<div v-for="(post, key) in category.posts" :key="key">
-								<PostContainer :post="post" />
+								<PostsContainer :post="post" :category="category" />
 								<hr />
 							</div>
 						</template>

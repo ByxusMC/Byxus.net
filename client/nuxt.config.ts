@@ -83,13 +83,17 @@ export default {
 	 ** Global style module settings
 	 ** See https://fr.nuxtjs.org/guides/configuration-glossary/configuration-css
 	 */
-	css: ['material-icons/iconfont/material-icons.scss', '~public/icons/style.css', '~public/scss/global.scss'],
+	css: [
+		'material-icons/iconfont/material-icons.scss',
+		'~public/icons/style.css',
+		'~public/scss/global.scss',
+	],
 
 	/*
 	 ** Plugins to load before mounting the App
 	 ** https://nuxtjs.org/guide/plugins
 	 */
-	plugins: [],
+	plugins: [{ src: '~/plugins/tui_editor.ts', mode: 'client', ssr: false }],
 
 	/**
 	 ** Build settings

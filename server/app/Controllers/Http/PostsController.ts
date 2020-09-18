@@ -6,13 +6,13 @@ import UpdateValidator from 'App/Validators/posts/UpdateValidator'
 
 export default class CategoriesController {
 	public async index() {
-		const categories = await Post.query()
-		return { categories }
+		const posts = await Post.query()
+		return posts
 	}
 
 	public async show({ params }: HttpContextContract) {
-		const categorie = await Post.findOrFail(params.id)
-		return { categorie }
+		const post = await Post.query().where('id', params.id).preload('comments').preload('user').firstOrFail()
+		return post
 	}
 
 	public async store({ request }: HttpContextContract) {
