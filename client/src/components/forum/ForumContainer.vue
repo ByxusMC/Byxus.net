@@ -63,10 +63,15 @@
 			/>
 			<hr />
 			<div class="categories-container">
-				<div v-for="(category, index) in forum.categories" :key="index">
-					<CategoriesContainer :forum="forum" :category="category" />
-					<hr />
-				</div>
+				<template v-if="forum.categories.length != 0">
+					<div v-for="(category, key) in forum.categories" :key="key">
+						<CategoriesContainer :forum="forum" :category="category" />
+						<hr />
+					</div>
+				</template>
+				<template v-else>
+					<CategoriesNotFound :forum="forum" :canCreate="canCreate" />
+				</template>
 			</div>
 		</div>
 	</div>
@@ -76,6 +81,7 @@
 import CategoriesContainerVue from './CategoriesContainer'
 import ForumModalUpdateVue from './ForumModalUpdate'
 import CategoriesModalCreateVue from './CategoriesModalCreate'
+import CategoriesNotFoundVue from './CategoriesNotFound'
 import { RolesGuard, I18N } from '~/utils'
 
 export default {
@@ -98,6 +104,7 @@ export default {
 		CategoriesContainer: CategoriesContainerVue,
 		ForumModalUpdate: ForumModalUpdateVue,
 		CategoriesModalCreate: CategoriesModalCreateVue,
+		CategoriesNotFound: CategoriesNotFoundVue,
 	},
 }
 </script>

@@ -12,6 +12,7 @@ export default class CategoriesController {
 			.preload('slug')
 			.preload('forum', (forum) => forum.preload('slug'))
 			.preload('posts', (post) => post.preload('comments'))
+			.preload('roles', (role) => role.preload('label'))
 		return categories
 	}
 
@@ -22,6 +23,7 @@ export default class CategoriesController {
 			.preload('slug')
 			.preload('forum', (forum) => forum.preload('slug'))
 			.preload('posts', (post) => post.preload('comments'))
+			.preload('roles', (role) => role.preload('label'))
 			.firstOrFail()
 		return categorie
 	}
@@ -42,8 +44,13 @@ export default class CategoriesController {
 	public async update({ request, params }: HttpContextContract) {
 		const categorie = await Category.findOrFail(params.id)
 		const data = await request.validate(UpdateValidator)
+		const roles = request.input('roles')
+		console.log(roles)
 
 		await categorie.merge(data).save()
+		if (roles) {
+			categorie.related('roles').sync(roles)
+		}
 
 		return { message: 'La catégorie a été mis à jour' }
 	}

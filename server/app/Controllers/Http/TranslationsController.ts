@@ -30,7 +30,7 @@ export default class TranslatinsController {
 
 		await translation.merge(data).save()
 
-		return { message: 'La traduction a été mis à jour' }
+		return translation
 	}
 
 	public async destroy({ params }: HttpContextContract) {

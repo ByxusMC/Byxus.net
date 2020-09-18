@@ -73,7 +73,10 @@ export default {
 	},
 	methods: {
 		hasRole(action) {
-			return RolesGuard.firewall(this.$auth.user, this.module, action)
+			if (this.$auth.loggedIn) {
+				return RolesGuard.firewall(this.$auth.user, this.module, action)
+			}
+			return false
 		},
 		async handleCreate() {
 			try {
