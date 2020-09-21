@@ -8,6 +8,8 @@
 					v-for="(comment, key) in post.comments"
 					:comment="comment"
 					:key="key"
+					:index="key"
+					@onUpdate="handleUpdate"
 				/>
 			</div>
 			<div class="statistics">
@@ -46,7 +48,6 @@ import AxiosConfig from '../../../../../../../config/Axios'
 import ForumBannerVue from '~/components/forum/ForumBanner'
 import PostContainerVue from '~/components/forum/PostContainer'
 import CommentsContainerVue from '~/components/forum/CommentsContainer'
-import moment from 'moment'
 import CommentsModalCreateVue from '~/components/forum/CommentsModalCreate'
 
 export default {
@@ -72,8 +73,20 @@ export default {
 				this.post = data
 				this.$toast.success('Le commentaire a bien été ajouté ✔')
 			} catch (error) {
-				console.log(2)
-				console.log(error)
+				error.response.data.errors.forEach((error) => {
+					this.$toast.error(error.message)
+				})
+			}
+		},
+		async handleUpdate(comment) {
+			try {
+				await this.$axios.put('/comments/' + comment.id, {
+					...form,
+					userId: this.$auth.user.id,
+					postId: this.post.id,
+				})
+				this.$toast.success('Le commentaire a bien été modifié ✔')
+			} catch (error) {
 				error.response.data.errors.forEach((error) => {
 					this.$toast.error(error.message)
 				})

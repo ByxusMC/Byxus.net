@@ -14,6 +14,7 @@
 				<div class="pseudonyme">
 					{{ comment.user.pseudonyme }}
 					<span
+						v-if="comment.user.roles.length != 0"
 						class="badge"
 						:style="'background-color:' + getMaxRole(comment.user.roles).color"
 					>
@@ -22,12 +23,21 @@
 				</div>
 				<div class="lasted">
 					{{ formatHours(comment.created_at) }}
+					<template v-if="$auth.loggedIn && comment.user.id === $auth.user.id">
+						<div
+							class="btn btn-secondary"
+							@click="$bvModal.show(`edit-comment-${index}-${comment.id}`)"
+						>
+							<i class="icon-edit"></i>
+						</div>
+					</template>
 				</div>
 			</div>
 			<div class="content-body">
 				<div v-html="$md.render(comment.message.replace(/<br>/g, '\n'))"></div>
 			</div>
 		</div>
+		<CommentsModalUpdate :comment="comment" :index="index" @onCreate="handleUpdate" />
 	</div>
 </template>
 
@@ -35,10 +45,11 @@
 import { RolesGuard } from '~/utils'
 import moment from 'moment'
 import CommentsModalCreateVue from '~/components/forum/CommentsModalCreate'
+import CommentsModalUpdateVue from '~/components/forum/CommentsModalUpdate'
 
 export default {
-	name: 'CommentModalCreate',
-	props: ['comment'],
+	name: 'CommentsContainer',
+	props: ['comment', 'index'],
 	methods: {
 		hasRole(action) {
 			return RolesGuard.firewall(this.$auth.user, this.module, action)
@@ -52,9 +63,13 @@ export default {
 		getMaxRole(roles) {
 			return RolesGuard.heightRole(roles)
 		},
+		handleUpdate() {
+			this.$emit('onUpdate', this.comment)
+		},
 	},
 	components: {
 		CommentsModalCreate: CommentsModalCreateVue,
+		CommentsModalUpdate: CommentsModalUpdateVue,
 	},
 }
 </script>
@@ -96,6 +111,21 @@ h1 {
 					font-size: 2px;
 					text-transform: uppercase;
 					padding: 0.1rem;
+				}
+			}
+			.lasted {
+				.btn {
+					margin-left: 1rem;
+					position: relative;
+					height: 30px;
+					width: 30px;
+					i {
+						position: absolute;
+						top: 50%;
+						left: 56%;
+						transform: translate(-50%, -50%);
+						color: white;
+					}
 				}
 			}
 		}
