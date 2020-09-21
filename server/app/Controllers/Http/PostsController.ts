@@ -13,7 +13,13 @@ export default class CategoriesController {
 	public async show({ params }: HttpContextContract) {
 		const post = await Post.query()
 			.where('id', params.id)
-			.preload('comments')
+			.preload('comments', (comment) => {
+				comment.preload('user', (user) => {
+					user.preload('roles', (role) => {
+						role.preload('label')
+					})
+				})
+			})
 			.preload('user', (user) => {
 				user.preload('roles', (role) => {
 					role.preload('label')

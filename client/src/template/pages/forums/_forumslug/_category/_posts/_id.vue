@@ -3,53 +3,35 @@
 		<ForumBanner />
 		<div class="container">
 			<div class="posts-container">
-				<div v-for="(n, key) in 15" class="posts" :key="key">
-					<div class="avatar">
-						<img
-							v-if="post.user.uuid"
-							:src="`http://cravatar.eu/helmavatar/${post.user.uuid}/${256}.png`"
-							class="img-fluid"
-							alt=""
-						/>
-						<img
-							v-else
-							src="https://via.placeholder.com/128x128"
-							class="img-fluid"
-							alt=""
-						/>
-					</div>
-					<div class="content">
-						<div class="content-header">
-							<div class="pseudonyme">
-								{{ post.user.pseudonyme }}
-								<span
-									class="badge"
-									:style="'background-color:' + getMaxRole.color"
-									:key="key"
-								>
-									{{ $t(getMaxRole.label.code) }}
-								</span>
-							</div>
-							<div class="lasted">
-								{{ formatHours(post.created_at) }}
-							</div>
-						</div>
-						<div class="content-body">
-							<p>
-								Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis
-								dignissimos delectus eum ut unde aperiam dolorum vel velit numquam
-								voluptatibus quo reprehenderit culpa recusandae iusto eligendi magni
-								maiores, pariatur aut? Lorem ipsum dolor sit amet consectetur
-								adipisicing elit. Quis dignissimos delectus eum ut unde aperiam
-								dolorum vel velit numquam voluptatibus quo reprehenderit culpa
-								recusandae iusto eligendi magni maiores, pariatur aut?
-							</p>
-						</div>
-					</div>
-				</div>
-				<hr />
+				<PostContainer :post="post" />
+				<CommentsContainer
+					v-for="(comment, key) in post.comments"
+					:comment="comment"
+					:key="key"
+				/>
 			</div>
-			<div class="statistics">a</div>
+			<div class="statistics">
+				<nuxt-link
+					to="/authentication/login"
+					v-if="!$auth.loggedIn"
+					class="btn btn-secondary"
+				>
+					Connectez-vous pour répondre
+				</nuxt-link>
+				<div v-else class="btn btn-secondary">Répondre</div>
+				<div class="item">
+					<div>{{ post.comments.length }}</div>
+					<i class="icon-comments-alt"></i>
+				</div>
+				<div v-if="post.is_resolved == 1" class="item">
+					<div>Résolu</div>
+					<i class="icon-check-circle"></i>
+				</div>
+				<div class="item">
+					<div>Non résolu</div>
+					<i class="icon-ban"></i>
+				</div>
+			</div>
 		</div>
 	</div>
 </template>
@@ -59,6 +41,8 @@ import { RolesGuard } from '~/utils'
 import axios from 'axios'
 import AxiosConfig from '../../../../../../../config/Axios'
 import ForumBannerVue from '~/components/forum/ForumBanner'
+import PostContainerVue from '~/components/forum/PostContainer'
+import CommentsContainerVue from '~/components/forum/CommentsContainer'
 import moment from 'moment'
 
 export default {
@@ -72,17 +56,7 @@ export default {
 			},
 		}
 	},
-	methods: {
-		hasRole(action) {
-			return RolesGuard.firewall(this.$auth.user, this.module, action)
-		},
-		formatHours(date) {
-			let final = ''
-			moment.locale('fr')
-			final = moment(date, 'YYYYMMDD').fromNow()
-			return final
-		},
-	},
+
 	async mounted() {
 		const { data: m } = await this.$axios.get('/modules/2')
 
@@ -102,6 +76,8 @@ export default {
 	},
 	components: {
 		ForumBanner: ForumBannerVue,
+		PostContainer: PostContainerVue,
+		CommentsContainer: CommentsContainerVue,
 	},
 }
 </script>
@@ -120,68 +96,34 @@ export default {
 			flex-direction: column;
 			width: 75%;
 			justify-content: center;
-			.posts {
-				padding: 2rem 0;
-				width: 100%;
-				display: flex;
-				flex-wrap: nowrap;
-				.avatar {
-					width: 64px;
-					img {
-						width: 256px;
-						border-radius: 12px;
-					}
-				}
-				.content {
-					padding: 0 2rem;
-					display: flex;
-					flex-direction: column;
-					width: calc(100% - 64px);
-					.content-header {
-						padding: 0 0 1rem 0;
-						display: flex;
-						justify-content: space-between;
-						.pseudonyme {
-							font-weight: 600;
-							font-size: 18px;
-							color: $primary-color;
-							.badge {
-								color: white;
-								font-size: 2px;
-								text-transform: uppercase;
-								padding: 0.1rem;
-							}
-						}
-					}
-					.content-body {
-						p {
-							letter-spacing: 0.5px;
-							line-height: 1.5rem;
-						}
-					}
-				}
-				&:first-child {
-					// background: green;
-					padding-top: 0;
-					padding-bottom: 1rem;
-
-					position: relative;
-					&::before {
-						content: '';
-						position: absolute;
-						bottom: 0;
-						left: 50%;
-						transform: translateX(-50%);
-						width: 90%;
-						height: 1px;
-						background: rgba(0, 0, 0, 0.1);
-					}
-				}
-			}
 		}
 		.statistics {
+			display: flex;
+			flex-direction: column;
 			width: 25%;
-			background: red;
+			// background: red;
+			.btn {
+				margin-left: auto;
+				margin-bottom: 1rem;
+			}
+			.item {
+				justify-self: flex-end;
+				text-align: right;
+				display: flex;
+				flex-wrap: nowrap;
+				justify-content: flex-end;
+				align-items: center;
+				&:first-child {
+					margin-top: 1rem;
+				}
+				div {
+					margin-right: 10px;
+					font-size: 18px;
+				}
+				i {
+					font-size: 18px;
+				}
+			}
 		}
 	}
 }
