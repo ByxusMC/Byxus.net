@@ -2,7 +2,7 @@
 	<div class="forum-section">
 		<div class="container">
 			<div class="d-flex justify-content-between">
-				<h1>POST name</h1>
+				<h1>{{ post.label }}</h1>
 				<div
 					v-if="hasRole('create') || hasRole('update') || hasRole('destroy')"
 					class="actions"
@@ -69,7 +69,6 @@ export default {
 
 	async asyncData({ isDev, route, store, env, params, query, req, res, redirect, error }) {
 		const { data } = await axios.get(AxiosConfig.baseURL + '/posts/' + params.id)
-		console.log(data)
 		return { post: data }
 	},
 }

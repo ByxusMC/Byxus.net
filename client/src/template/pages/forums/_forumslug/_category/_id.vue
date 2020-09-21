@@ -5,6 +5,7 @@
 			<div class="d-flex justify-content-end">
 				<div class="actions">
 					<nuxt-link
+						v-if="$auth.loggedIn"
 						:to="`/forums/${$t(category.forum.slug.code)}/${$t(category.slug.code)}/${
 							category.id
 						}/post/create`"
