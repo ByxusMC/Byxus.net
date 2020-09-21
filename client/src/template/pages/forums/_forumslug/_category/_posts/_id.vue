@@ -18,7 +18,9 @@
 				>
 					Connectez-vous pour répondre
 				</nuxt-link>
-				<div v-else class="btn btn-secondary">Répondre</div>
+				<div v-else class="btn btn-secondary" @click="$bvModal.show('new-comment')">
+					Répondre
+				</div>
 				<div class="item">
 					<div>{{ post.comments.length }}</div>
 					<i class="icon-comments-alt"></i>
@@ -33,6 +35,7 @@
 				</div>
 			</div>
 		</div>
+		<CommentsModalCreate @onCreate="handleCreate" />
 	</div>
 </template>
 
@@ -44,6 +47,7 @@ import ForumBannerVue from '~/components/forum/ForumBanner'
 import PostContainerVue from '~/components/forum/PostContainer'
 import CommentsContainerVue from '~/components/forum/CommentsContainer'
 import moment from 'moment'
+import CommentsModalCreateVue from '~/components/forum/CommentsModalCreate'
 
 export default {
 	layout: 'forum',
@@ -55,6 +59,26 @@ export default {
 				destroy: [],
 			},
 		}
+	},
+	methods: {
+		async handleCreate(form) {
+			try {
+				await this.$axios.post('/comments', {
+					...form,
+					userId: this.$auth.user.id,
+					postId: this.post.id,
+				})
+				const { data } = await axios.get(AxiosConfig.baseURL + '/posts/' + this.post.id)
+				this.post = data
+				this.$toast.success('Le commentaire a bien été ajouté ✔')
+			} catch (error) {
+				console.log(2)
+				console.log(error)
+				error.response.data.errors.forEach((error) => {
+					this.$toast.error(error.message)
+				})
+			}
+		},
 	},
 
 	async mounted() {
@@ -78,6 +102,7 @@ export default {
 		ForumBanner: ForumBannerVue,
 		PostContainer: PostContainerVue,
 		CommentsContainer: CommentsContainerVue,
+		CommentsModalCreate: CommentsModalCreateVue,
 	},
 }
 </script>

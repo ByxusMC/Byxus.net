@@ -8,7 +8,7 @@ export default class Comments extends BaseSchema {
 			table.increments('id')
 			table.integer('post_id').unsigned().references('id').inTable('posts')
 			table.integer('user_id').unsigned().references('id').inTable('users')
-			table.string('message').notNullable()
+			table.text('message').notNullable()
 			table.timestamps(true, true)
 		})
 	}

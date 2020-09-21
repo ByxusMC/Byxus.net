@@ -165,13 +165,17 @@ export default {
 		this.loading = false
 		let array = []
 
-		const heightRole = RolesGuard.heightRole(this.$auth.user.roles)
-		this.roles.forEach((role) => {
-			if (role.power <= heightRole.power) {
-				array = [...array, role]
+		if (this.$auth.loggedIn) {
+			if (this.$auth.user.roles.length != 0) {
+				const heightRole = RolesGuard.heightRole(this.$auth.user.roles)
+				this.roles.forEach((role) => {
+					if (role.power <= heightRole.power) {
+						array = [...array, role]
+					}
+				})
+				this.filteredRoles = array
 			}
-		})
-		this.filteredRoles = array
+		}
 		this.$emit('displayName', 'Forums byxus.fr')
 	},
 

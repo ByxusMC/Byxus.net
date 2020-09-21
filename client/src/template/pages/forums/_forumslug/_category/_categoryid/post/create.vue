@@ -87,7 +87,7 @@ export default {
 	},
 	methods: {
 		async onEditorChange() {
-			this.form.description = this.$refs.editor.invoke('getHtml')
+			this.form.description = this.$refs.editor.invoke('getMarkdown')
 		},
 		async handleSubmit() {
 			console.log({

@@ -9,7 +9,7 @@ export default class Posts extends BaseSchema {
 			table.integer('category_id').unsigned().references('id').inTable('categories').onDelete('CASCADE')
 			table.integer('user_id').unsigned().references('id').inTable('users')
 			table.string('label').notNullable()
-			table.string('description').notNullable()
+			table.text('description').notNullable()
 			table.boolean('is_resolved').notNullable().defaultTo(false)
 			table.boolean('can_reply').notNullable().defaultTo(true)
 			table.timestamps(true, true)

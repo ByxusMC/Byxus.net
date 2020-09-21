@@ -25,7 +25,7 @@
 				</div>
 			</div>
 			<div class="content-body">
-				<div v-html="post.description"></div>
+				<div v-html="$md.render(post.description.replace(/<br>/g, '\n'))"></div>
 			</div>
 		</div>
 	</div>
@@ -56,6 +56,11 @@ export default {
 
 <style lang="scss" scoped>
 @import '~public/scss/modules/variables.scss';
+h1 {
+	&::before {
+		content: none !important;
+	}
+}
 .posts {
 	padding: 2rem 0;
 	width: 100%;

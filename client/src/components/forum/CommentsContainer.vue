@@ -1,5 +1,5 @@
 <template>
-	<div class="coments">
+	<div class="comments">
 		<div class="avatar">
 			<img
 				v-if="comment.user.uuid"
@@ -25,7 +25,7 @@
 				</div>
 			</div>
 			<div class="content-body">
-				<div v-html="comment.message"></div>
+				<div v-html="$md.render(comment.message.replace(/<br>/g, '\n'))"></div>
 			</div>
 		</div>
 	</div>
@@ -34,8 +34,10 @@
 <script>
 import { RolesGuard } from '~/utils'
 import moment from 'moment'
+import CommentsModalCreateVue from '~/components/forum/CommentsModalCreate'
+
 export default {
-	name: 'CommentsContainer',
+	name: 'CommentModalCreate',
 	props: ['comment'],
 	methods: {
 		hasRole(action) {
@@ -51,13 +53,20 @@ export default {
 			return RolesGuard.heightRole(roles)
 		},
 	},
+	components: {
+		CommentsModalCreate: CommentsModalCreateVue,
+	},
 }
 </script>
 
 <style lang="scss" scoped>
 @import '~public/scss/modules/variables.scss';
-
-.coments {
+h1 {
+	&::before {
+		content: none !important;
+	}
+}
+.comments {
 	padding: 2rem 0;
 	width: 100%;
 	display: flex;
