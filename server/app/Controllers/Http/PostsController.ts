@@ -11,7 +11,15 @@ export default class CategoriesController {
 	}
 
 	public async show({ params }: HttpContextContract) {
-		const post = await Post.query().where('id', params.id).preload('comments').preload('user').firstOrFail()
+		const post = await Post.query()
+			.where('id', params.id)
+			.preload('comments')
+			.preload('user', (user) => {
+				user.preload('roles', (role) => {
+					role.preload('label')
+				})
+			})
+			.firstOrFail()
 		return post
 	}
 

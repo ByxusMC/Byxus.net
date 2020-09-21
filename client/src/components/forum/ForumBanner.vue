@@ -30,6 +30,9 @@ export default {
 		const { params } = this.$route
 		console.log(typeof params)
 		if (params.forumslug || params.category) {
+			if (params.posts) {
+				return (this.title = this.format(params.posts))
+			}
 			if (params.category) {
 				return (this.title = this.format(params.category))
 			}
