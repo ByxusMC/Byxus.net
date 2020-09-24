@@ -24,10 +24,17 @@ export default class StoreValidator {
 	 *    ```
 	 */
 	public schema = schema.create({
-		firstname: schema.string.optional({ trim: true }),
-		lastname: schema.string.optional({ trim: true }),
+		pseudonyme: schema.string.optional({ trim: true }),
 		email: schema.string.optional({ trim: true }, [rules.email(), rules.unique({ table: 'users', column: 'email' })]),
-		password: schema.string.optional({ trim: true }, [rules.confirmed()])
+		password: schema.string.optional({ trim: true }, [rules.confirmed()]),
+		uuid: schema.string.optional({ trim: true }, [
+			rules.regex(/[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}/)
+		]),
+		is_active: schema.boolean.optional(),
+		is_confirmed: schema.boolean.optional(),
+		is_ban: schema.boolean.optional(),
+		confirmation_token: schema.string.optional(),
+		recovery_token: schema.string.optional()
 	})
 
 	/**
@@ -52,8 +59,8 @@ export default class StoreValidator {
 	 */
 	public messages = {
 		required: 'Le champ {{ field }} est obligatoire',
-		'firstname.required': 'Le prénom est obligatoire',
-		'lastname.required': 'Le nom est obligatoire',
+		'pseudonyme.required': 'Le pseudo minecarft est obligatoire',
+		'pseudonyme.string': 'Le pseudo doit-être une chaîne de caractère',
 		'email.required': "L'email est obligatoire",
 		'email.email': "L'email doit-être une adresse email valide",
 		'email.unique': "L'email existe déjà, veuillez en choisir une autre",

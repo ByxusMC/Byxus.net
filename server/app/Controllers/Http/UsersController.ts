@@ -6,12 +6,21 @@ import UpdateValidator from 'App/Validators/users/UpdateValidator'
 
 export default class UsersController {
 	public async index() {
-		const users = await User.all()
+		const users = await User.query().preload('roles', (role) => {
+			role.orderBy('power', 'desc')
+			role.preload('label')
+		})
 		return { users }
 	}
 
 	public async show({ params }: HttpContextContract) {
 		const user = await User.findOrFail(params.id)
+		await user.preload('roles', (role) => {
+			role.orderBy('power', 'desc')
+			role.preload('label', (label) => {
+				label.select(['code'])
+			})
+		})
 		return { user }
 	}
 
@@ -22,31 +31,15 @@ export default class UsersController {
 		return { user }
 	}
 
-	public async update({ response, request, params, auth }: HttpContextContract) {
+	public async update({ request, params }: HttpContextContract) {
 		const user = await User.findOrFail(params.id)
-
-		if (user.id != auth.user!.id) {
-			return response.unauthorized()
-		}
-
+		const roles = await request.input('roles')
 		const data = await request.validate(UpdateValidator)
 
-		/**
-		 *	const avatar = request.file('avatar', {
-		 *		extnames: ['jpg', 'jpeg', 'png', 'svg']
-		 * 	})
-		 * 
-		 * 	if (avatar?.hasErrors) {
-		 *		return avatar.errors
-		 *	}
-
-		 *	await avatar?.move(Application.publicPath(`/uploads/users/avatar`), {
-		 *		name: `${params.id}.${avatar.extname}`,
-		 *		overwrite: true
-		 *	})
-		 */
-
-		await auth.user!.merge({ ...data }).save()
+		await user.merge(data).save()
+		if (roles) {
+			await user.related('roles').sync(roles)
+		}
 
 		return { message: 'Le compte a été mis à jour' }
 	}

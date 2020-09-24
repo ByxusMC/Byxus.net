@@ -2,12 +2,6 @@ import { Auth, Axios, BootstrapVue, Meta, Robots, Sitemap, Toasts, Translations 
 
 export default {
 	/*
-	 ** Nuxt rendering mode
-	 ** See https://nuxtjs.org/api/configuration-mode
-	 */
-	mode: 'universal',
-
-	/*
 	 ** Nuxt target
 	 ** See https://nuxtjs.org/api/configuration-target
 	 */
@@ -70,6 +64,17 @@ export default {
 
 		// Doc : https://github.com/nuxt-community/robots-module
 		['@nuxtjs/robots', Robots],
+
+		[
+			'@nuxtjs/markdownit',
+			{
+				preset: 'default',
+				linkify: true,
+				breaks: true,
+				use: ['markdown-it-div', 'markdown-it-attrs'],
+				injected: true,
+			},
+		],
 	],
 
 	/**
@@ -89,13 +94,17 @@ export default {
 	 ** Global style module settings
 	 ** See https://fr.nuxtjs.org/guides/configuration-glossary/configuration-css
 	 */
-	css: ['material-icons/iconfont/material-icons.scss'],
+	css: [
+		'material-icons/iconfont/material-icons.scss',
+		'~public/icons/style.css',
+		'~public/scss/global.scss',
+	],
 
 	/*
 	 ** Plugins to load before mounting the App
 	 ** https://nuxtjs.org/guide/plugins
 	 */
-	plugins: [],
+	plugins: [{ src: '~/plugins/tui_editor.ts', mode: 'client', ssr: false }],
 
 	/**
 	 ** Build settings

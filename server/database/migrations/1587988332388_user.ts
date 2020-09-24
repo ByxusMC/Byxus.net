@@ -9,8 +9,7 @@ export default class UsersSchema extends BaseSchema {
 			table.string('email', 255).notNullable()
 			table.string('password', 180).notNullable()
 			table.string('remember_me_token').nullable()
-			table.dateTime('created_at').notNullable()
-			table.dateTime('updated_at').notNullable()
+			table.timestamps(true, true)
 		})
 	}
 

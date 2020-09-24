@@ -1,96 +1,112 @@
 <template>
-	<div>
-		<b-navbar toggleable="lg" type="dark" variant="dark" sticky>
-			<b-navbar-brand href="#">Izoxy</b-navbar-brand>
-			<b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
+	<b-navbar toggleable="md" sticky>
+		<b-navbar-brand href="#">ByxusMC</b-navbar-brand>
+		<div class="online-players btn btn-secondary font-weight-500 letter-spacing-1">{{ $t('players_online') }} : 5</div>
 
-			<b-collapse id="nav-collapse" is-nav>
-				<b-navbar-nav>
-					<b-nav-item href="#">Accueil</b-nav-item>
-				</b-navbar-nav>
+		<b-collapse id="nav-collapse" is-nav>
+			<b-navbar-nav>
+				<li class="nav-item" :class="{ active: this.$route.path.split('/')[1] == '' }">
+					<nuxt-link to="/" href="#" class="text-uppercase font-weight-500 letter-spacing-1">Accueil</nuxt-link>
+				</li>
+				<li class="nav-item" :class="{ active: this.$route.path.split('/')[1] == 'forums' }">
+					<nuxt-link to="/forums" href="#" class="text-uppercase font-weight-500 letter-spacing-1">Forum</nuxt-link>
+				</li>
+				<li class="nav-item">
+					<nuxt-link to="/" href="#" class="text-uppercase font-weight-500 letter-spacing-1">Nos jeux</nuxt-link>
+				</li>
+				<li class="nav-item" :class="{ active: this.$route.path.split('/')[1] == 'members' }">
+					<nuxt-link to="/" href="#" class="text-uppercase font-weight-500 letter-spacing-1">Statistiques</nuxt-link>
+				</li>
+			</b-navbar-nav>
 
-				<b-navbar-nav class="ml-auto">
-					<b-nav-item-dropdown v-if="this.$auth.loggedIn" right>
-						<template v-slot:button-content>
-							<b-avatar></b-avatar>
-							{{ identity }}
-						</template>
-						<b-dropdown-item href="#">Mon profil</b-dropdown-item>
-						<b-dropdown-item @click="handleLogout">Se déconnecter</b-dropdown-item>
-					</b-nav-item-dropdown>
-					<b-button v-else @click.prevent="toggleModal" right>Connexion</b-button>
-				</b-navbar-nav>
-			</b-collapse>
-		</b-navbar>
-		<b-modal ref="login-modal" id="login" size="md" hide-footer title="Authentification">
-			<b-form>
-				<b-input-group prepend="@" class="custom-input-group mb-2 mr-sm-2 mb-sm-0">
-					<b-input v-model="form.email" placeholder="Email"></b-input>
-				</b-input-group>
-				<b-input-group prepend="🔒" class="custom-input-group mb-2 mr-sm-2 mb-sm-0">
-					<b-input v-model="form.password" type="password" placeholder="Password"></b-input>
-				</b-input-group>
-				<b-form-checkbox v-model="form.remember_me" name="remember-me" switch>Se souvenir de moi</b-form-checkbox>
-				<br />
-				<b-button @click.prevent="handleLogin">Connexion</b-button>
-			</b-form>
-		</b-modal>
-	</div>
+			<b-navbar-nav class="ml-auto">
+				<b-nav-item-dropdown style="padding: 0" v-if="$auth.loggedIn" right>
+					<template v-slot:button-content>
+						<span class="text-uppercase font-weight-500 letter-spacing-1 pr-2" style="color: white">{{ $auth.user.pseudonyme }}</span>
+						<b-avatar v-if="$auth.user.uuid" square rounded :src="`http://cravatar.eu/helmavatar/${$auth.user.uuid}/${128}.png`" alt="avatar"></b-avatar>
+						<b-avatar v-else square rounded alt="avatar"></b-avatar>
+					</template>
+					<div class="dropdown-item">
+						<nuxt-link :to="`/members/${this.$auth.user.pseudonyme}/${this.$auth.user.id}`">Mon profil</nuxt-link>
+					</div>
+					<b-dropdown-item @click="handleLogout">Se déconnecter</b-dropdown-item>
+				</b-nav-item-dropdown>
+				<nuxt-link v-else to="/authentication/login" class="btn btn-secondary">Connexion</nuxt-link>
+			</b-navbar-nav>
+		</b-collapse>
+	</b-navbar>
 </template>
 
 <script>
 export default {
 	name: 'Navbar',
-	data() {
-		return {
-			form: {
-				email: '',
-				password: '',
-				remember_me: false,
-			},
-		}
-	},
 	methods: {
-		toggleModal: function () {
-			this.$refs['login-modal'].show()
-		},
 		handleLogout: async function () {
 			await this.$auth.logout()
 			await this.$router.push('/')
 		},
-		handleLogin: async function () {
-			try {
-				await this.$auth.loginWith('local', {
-					data: {
-						email: this.form.email,
-						password: this.form.password,
-						remember_me: this.form.remember_me,
-					},
-				})
-			} catch (error) {
-				console.log(error)
-			}
-		},
 	},
-	computed: {
-		identity() {
-			return this.$auth.user.firstname + ' ' + this.$auth.user.lastname
-		},
-	},
+	mounted() {},
 }
 </script>
 
 <style lang="scss" scoped>
+@import '~public/scss/modules/variables';
+
 .custom-input-group {
 	margin-bottom: 10px !important;
 }
 .b-avatar {
 	margin-right: 10px;
+	border-radius: 4px !important;
 }
 .navbar {
 	height: 70px;
+	background-color: $primary-color;
 	@media screen and (min-width: 576px) {
 		padding: 0 10%;
+		.online-players {
+			display: none;
+		}
+	}
+	.navbar-brand {
+		color: white;
+		@media screen and (min-width: 576px) {
+			display: none;
+		}
+	}
+	.navbar-nav:first-child {
+		.nav-item {
+			margin: 0 1rem;
+			position: relative;
+			transition: 0.3s all;
+			a {
+				color: white;
+				text-decoration: none;
+			}
+			&.active {
+				&::before {
+					content: '';
+					position: absolute;
+					bottom: -25px;
+					left: 50%;
+					transform: translateX(-50%);
+					width: 120%;
+					border-bottom: 5px solid $secondary-color;
+				}
+			}
+			&:hover {
+				&::before {
+					content: '';
+					position: absolute;
+					bottom: -25px;
+					left: 50%;
+					transform: translateX(-50%);
+					width: 120%;
+					border-bottom: 5px solid $secondary-color;
+				}
+			}
+		}
 	}
 }
 </style>

@@ -19,4 +19,6 @@ export default {
 	vueI18n: {
 		fallbackLocale: 'en',
 	},
+	syncLocale: false,
+	syncMessages: false,
 }
